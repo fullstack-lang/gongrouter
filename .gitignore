@@ -1,2 +1,4 @@
 go/cmd/gongrouter/__debug_bin
 go/cmd/gongrouter/gongrouter
+go/cmd/gongrouter/gongrouter.exe
+go/cmd/gongrouter/__debug_bin.exe
