@@ -12,9 +12,10 @@ import * as gongrouter from 'gongrouter'
 export class AppComponent implements OnInit {
 
   default = 'Gongrouter Data/Model'
-  view = this.default
+  router = "Router"
+  view = this.router
 
-  views: string[] = [this.default];
+  views: string[] = [this.router, this.default];
 
   DataStack = "gongrouter"
   ModelStacks = "github.com/fullstack-lang/gongrouter/go/models"
