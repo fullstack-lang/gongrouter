@@ -16,6 +16,12 @@ export * from './lib/push_from_front_nb.service'
 export * from './lib/route-service'
 
 
+export * from './lib/editoroutlet-detail/editoroutlet-detail.component'
+export * from './lib/editoroutlet-sorting/editoroutlet-sorting.component'
+export * from './lib/editoroutlets-table/editoroutlets-table.component'
+export * from './lib/editoroutlet-db'
+export * from './lib/editoroutlet.service'
+
 export * from './lib/tableoutlet-detail/tableoutlet-detail.component'
 export * from './lib/tableoutlet-sorting/tableoutlet-sorting.component'
 export * from './lib/tableoutlets-table/tableoutlets-table.component'

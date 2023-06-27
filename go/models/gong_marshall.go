@@ -110,6 +110,38 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	_ = setValueField 
 
 	// insertion initialization of objects to stage
+	map_EditorOutlet_Identifiers := make(map[*EditorOutlet]string)
+	_ = map_EditorOutlet_Identifiers
+
+	editoroutletOrdered := []*EditorOutlet{}
+	for editoroutlet := range stage.EditorOutlets {
+		editoroutletOrdered = append(editoroutletOrdered, editoroutlet)
+	}
+	sort.Slice(editoroutletOrdered[:], func(i, j int) bool {
+		return editoroutletOrdered[i].Name < editoroutletOrdered[j].Name
+	})
+	identifiersDecl += "\n\n	// Declarations of staged instances of EditorOutlet"
+	for idx, editoroutlet := range editoroutletOrdered {
+
+		id = generatesIdentifier("EditorOutlet", idx, editoroutlet.Name)
+		map_EditorOutlet_Identifiers[editoroutlet] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "EditorOutlet")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", editoroutlet.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n\n	// EditorOutlet values setup"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(editoroutlet.Name))
+		initializerStatements += setValueField
+
+	}
+
 	map_TableOutlet_Identifiers := make(map[*TableOutlet]string)
 	_ = map_TableOutlet_Identifiers
 
@@ -143,6 +175,16 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	}
 
 	// insertion initialization of objects to stage
+	for idx, editoroutlet := range editoroutletOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("EditorOutlet", idx, editoroutlet.Name)
+		map_EditorOutlet_Identifiers[editoroutlet] = id
+
+		// Initialisation of values
+	}
+
 	for idx, tableoutlet := range tableoutletOrdered {
 		var setPointerField string
 		_ = setPointerField

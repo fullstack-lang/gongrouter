@@ -13,6 +13,7 @@ func SerializeStage(stage *StageStruct, filename string) {
 	f := excelize.NewFile()
 	{
 		// insertion point
+		SerializeExcelize[EditorOutlet](stage, f)
 		SerializeExcelize[TableOutlet](stage, f)
 	}
 

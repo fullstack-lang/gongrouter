@@ -9,15 +9,13 @@ export class AppComponent implements OnInit {
 
   default = 'Gongrouter Data/Model'
   tableoutlet = "Table Outlet"
+  editoroutlet = "Editor Outlet"
   view = this.tableoutlet
 
-  views: string[] = [this.tableoutlet, this.default];
+  views: string[] = [this.tableoutlet, this.editoroutlet, this.default];
 
   DataStack = "gongrouter"
   ModelStacks = "github.com/fullstack-lang/gongrouter/go/models"
-
-  myArray = ['Triage']
-  tableOutletName: string = ""
 
   constructor(
   ) {

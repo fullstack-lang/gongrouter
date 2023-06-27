@@ -303,6 +303,7 @@ func ParseAstFileFromAst(stage *StageStruct, inFile *ast.File, fset *token.FileS
 var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 
 // insertion point for identifiers maps
+var __gong__map_EditorOutlet = make(map[string]*EditorOutlet)
 var __gong__map_TableOutlet = make(map[string]*TableOutlet)
 
 // Parser needs to be configured for having the [Name1.Name2] or [pkg.Name1] ...
@@ -476,6 +477,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 									// this is the place where an instance is created
 									switch gongstructName {
 									// insertion point for identifiers
+									case "EditorOutlet":
+										instanceEditorOutlet := (&EditorOutlet{Name: instanceName}).Stage(stage)
+										instance = any(instanceEditorOutlet)
+										__gong__map_EditorOutlet[identifier] = instanceEditorOutlet
 									case "TableOutlet":
 										instanceTableOutlet := (&TableOutlet{Name: instanceName}).Stage(stage)
 										instance = any(instanceTableOutlet)
@@ -516,6 +521,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						}
 						switch gongstructName {
 						// insertion point for basic lit assignments
+						case "EditorOutlet":
+							switch fieldName {
+							// insertion point for date assign code
+							}
 						case "TableOutlet":
 							switch fieldName {
 							// insertion point for date assign code
@@ -545,6 +554,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					switch gongstructName {
 					// insertion point for slice of pointers assignments
+					case "EditorOutlet":
+						switch fieldName {
+						// insertion point for slice of pointers assign code
+						}
 					case "TableOutlet":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
@@ -598,6 +611,14 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 
 			switch gongstructName {
 			// insertion point for basic lit assignments
+			case "EditorOutlet":
+				switch fieldName {
+				// insertion point for field dependant code
+				case "Name":
+					// remove first and last char
+					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
+					__gong__map_EditorOutlet[identifier].Name = fielValue
+				}
 			case "TableOutlet":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -620,6 +641,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			}
 			switch gongstructName {
 			// insertion point for bool & pointers assignments
+			case "EditorOutlet":
+				switch fieldName {
+				// insertion point for field dependant code
+				}
 			case "TableOutlet":
 				switch fieldName {
 				// insertion point for field dependant code
@@ -652,6 +677,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				_ = enumValue
 				switch gongstructName {
 				// insertion point for enums assignments
+				case "EditorOutlet":
+					switch fieldName {
+					// insertion point for enum assign code
+					}
 				case "TableOutlet":
 					switch fieldName {
 					// insertion point for enum assign code

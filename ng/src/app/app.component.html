@@ -12,7 +12,16 @@
         <ng-container *ngTemplateOutlet="radioToolbar"></ng-container>
     </as-split-area>
     <as-split-area [size]="$any('*')">
-        <lib-table-outlet [DataStack]="DataStack" [StructNames]="myArray"></lib-table-outlet>
+        <lib-table-outlet [DataStack]="DataStack"></lib-table-outlet>
+    </as-split-area>
+</as-split>
+
+<as-split unit="pixel" *ngIf="view==editoroutlet" direction="vertical">
+    <as-split-area [size]=40>
+        <ng-container *ngTemplateOutlet="radioToolbar"></ng-container>
+    </as-split-area>
+    <as-split-area [size]="$any('*')">
+        <lib-editor-outlet [DataStack]="DataStack"></lib-editor-outlet>
     </as-split-area>
 </as-split>
 

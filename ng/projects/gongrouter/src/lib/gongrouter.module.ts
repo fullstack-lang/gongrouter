@@ -39,6 +39,10 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { GongstructSelectionService } from './gongstruct-selection.service'
 
 // insertion point for imports 
+import { EditorOutletsTableComponent } from './editoroutlets-table/editoroutlets-table.component'
+import { EditorOutletSortingComponent } from './editoroutlet-sorting/editoroutlet-sorting.component'
+import { EditorOutletDetailComponent } from './editoroutlet-detail/editoroutlet-detail.component'
+
 import { TableOutletsTableComponent } from './tableoutlets-table/tableoutlets-table.component'
 import { TableOutletSortingComponent } from './tableoutlet-sorting/tableoutlet-sorting.component'
 import { TableOutletDetailComponent } from './tableoutlet-detail/tableoutlet-detail.component'
@@ -47,6 +51,10 @@ import { TableOutletDetailComponent } from './tableoutlet-detail/tableoutlet-det
 @NgModule({
 	declarations: [
 		// insertion point for declarations 
+		EditorOutletsTableComponent,
+		EditorOutletSortingComponent,
+		EditorOutletDetailComponent,
+
 		TableOutletsTableComponent,
 		TableOutletSortingComponent,
 		TableOutletDetailComponent,
@@ -90,6 +98,10 @@ import { TableOutletDetailComponent } from './tableoutlet-detail/tableoutlet-det
 	],
 	exports: [
 		// insertion point for declarations 
+		EditorOutletsTableComponent,
+		EditorOutletSortingComponent,
+		EditorOutletDetailComponent,
+
 		TableOutletsTableComponent,
 		TableOutletSortingComponent,
 		TableOutletDetailComponent,

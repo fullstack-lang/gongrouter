@@ -5,14 +5,14 @@ import * as gongrouter from 'gongrouter'
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'lib-table-outlet',
-  templateUrl: './table-outlet.component.html',
-  styleUrls: ['./table-outlet.component.css']
+  selector: 'lib-editor-outlet',
+  templateUrl: './editor-outlet.component.html',
+  styleUrls: ['./editor-outlet.component.css']
 })
-export class TableOutletComponent implements OnInit {
+export class EditorOutletComponent implements OnInit {
 
   @Input() DataStack: string = ""
-  tableOutletName: string = ""
+  editorOutletName: string = ""
 
   name: string = ""
 
@@ -42,7 +42,7 @@ export class TableOutletComponent implements OnInit {
   ngOnInit(): void {
     this.routeService.addDataPanelRoutes(this.DataStack)
 
-    this.tableOutletName = this.routeService.getTableOutlet(this.DataStack)
+    this.editorOutletName = this.routeService.getEditorOutlet(this.DataStack)
 
     this.startAutoRefresh(500); // Refresh every 500 ms (half second)
   }
@@ -62,11 +62,11 @@ export class TableOutletComponent implements OnInit {
     this.commutNbFromBackSubscription = this.gongrouterCommitNbFromBackService
       .getCommitNbFromBack(intervalMs, this.DataStack)
       .subscribe((commitNbFromBack: number) => {
-        // console.log("TableOutletComponent, last commit nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
+        // console.log("EditorOutletComponent, last commit nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
 
         if (this.lastCommitNbFromBack < commitNbFromBack) {
           const d = new Date()
-          console.log("TableOutletComponent, ", this.DataStack, " name ", d.toLocaleTimeString() + `.${d.getMilliseconds()}` +
+          console.log("EditorOutletComponent, ", this.DataStack, " name ", d.toLocaleTimeString() + `.${d.getMilliseconds()}` +
             ", last commit increased nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
           this.lastCommitNbFromBack = commitNbFromBack
           this.refresh()
@@ -81,34 +81,29 @@ export class TableOutletComponent implements OnInit {
       gongroutersFrontRepo => {
         this.gongrouterFrontRepo = gongroutersFrontRepo
 
-        var tableoutletSingloton: gongrouter.TableOutletDB = new (gongrouter.TableOutletDB)
+        var editoroutletSingloton: gongrouter.EditorOutletDB = new (gongrouter.EditorOutletDB)
         var selected: boolean = false
-        for (var tableoutlet of this.gongrouterFrontRepo.TableOutlets_array) {
-          tableoutletSingloton = tableoutlet
+        for (var editoroutlet of this.gongrouterFrontRepo.EditorOutlets_array) {
+          editoroutletSingloton = editoroutlet
           selected = true
         }
         if (!selected) {
-          console.log("no tableoutlet present")
+          console.log("no editoroutlet present")
           return
         }
 
-        this.setTableRouterOutlet(tableoutletSingloton.Name.toLowerCase() + "s")
+        this.setEditorRouterOutlet(editoroutletSingloton.Name.toLowerCase() + "-adder")
 
       }
     )
   }
 
-  /**
- * 
- * @param path for the outlet selection
- */
-  setTableRouterOutlet(path: string) {
-    let outletName = this.routeService.getTableOutlet(this.DataStack)
+  setEditorRouterOutlet(path: string) {
+    let outletName = this.routeService.getEditorOutlet(this.DataStack)
     let fullPath = this.routeService.getPathRoot() + "-" + path.toLowerCase()
     let outletConf: any = {}
     outletConf[outletName] = [fullPath, this.DataStack]
-
-    this.router.navigate([{ outlets: outletConf }])
+    this.router.navigate([{ outlets: outletConf }]);
   }
 
 }

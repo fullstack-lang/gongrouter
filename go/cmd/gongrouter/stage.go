@@ -38,10 +38,16 @@ func stageInjection(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
+	// Declarations of staged instances of EditorOutlet
+	__EditorOutlet__000000_EditorOutlet := (&models.EditorOutlet{Name: `EditorOutlet`}).Stage(stage)
+
 	// Declarations of staged instances of TableOutlet
 	__TableOutlet__000000_TableOutlet := (&models.TableOutlet{Name: `TableOutlet`}).Stage(stage)
 
 	// Setup of values
+
+	// EditorOutlet values setup
+	__EditorOutlet__000000_EditorOutlet.Name = `EditorOutlet`
 
 	// TableOutlet values setup
 	__TableOutlet__000000_TableOutlet.Name = `TableOutlet`

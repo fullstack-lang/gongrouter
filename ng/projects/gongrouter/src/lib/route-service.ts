@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Route, Router, Routes } from '@angular/router';
 
 // insertion point for imports
+import { EditorOutletsTableComponent } from './editoroutlets-table/editoroutlets-table.component'
+import { EditorOutletDetailComponent } from './editoroutlet-detail/editoroutlet-detail.component'
+
 import { TableOutletsTableComponent } from './tableoutlets-table/tableoutlets-table.component'
 import { TableOutletDetailComponent } from './tableoutlet-detail/tableoutlet-detail.component'
 
@@ -36,6 +39,39 @@ export class RouteService {
         return this.getPathRoot() + '_editor' + '_' + stackPath
     }
     // insertion point for per gongstruct route/path getters
+    getEditorOutletTablePath(): string {
+        return this.getPathRoot() + '-editoroutlets/:GONG__StackPath'
+    }
+    getEditorOutletTableRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getEditorOutletTablePath(), component: EditorOutletsTableComponent, outlet: this.getTableOutlet(stackPath) }
+        return route
+    }
+    getEditorOutletAdderPath(): string {
+        return this.getPathRoot() + '-editoroutlet-adder/:GONG__StackPath'
+    }
+    getEditorOutletAdderRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getEditorOutletAdderPath(), component: EditorOutletDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getEditorOutletAdderForUsePath(): string {
+        return this.getPathRoot() + '-editoroutlet-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath'
+    }
+    getEditorOutletAdderForUseRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getEditorOutletAdderForUsePath(), component: EditorOutletDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getEditorOutletDetailPath(): string {
+        return this.getPathRoot() + '-editoroutlet-detail/:id/:GONG__StackPath'
+    }
+    getEditorOutletDetailRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getEditorOutletDetailPath(), component: EditorOutletDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+
     getTableOutletTablePath(): string {
         return this.getPathRoot() + '-tableoutlets/:GONG__StackPath'
     }
@@ -75,6 +111,11 @@ export class RouteService {
 
         this.addRoutes([
             // insertion point for all routes getter
+            this.getEditorOutletTableRoute(stackPath),
+            this.getEditorOutletAdderRoute(stackPath),
+            this.getEditorOutletAdderForUseRoute(stackPath),
+            this.getEditorOutletDetailRoute(stackPath),
+
             this.getTableOutletTableRoute(stackPath),
             this.getTableOutletAdderRoute(stackPath),
             this.getTableOutletAdderForUseRoute(stackPath),

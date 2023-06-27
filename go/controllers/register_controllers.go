@@ -41,6 +41,13 @@ type ValidationError struct {
 func registerControllers(r *gin.Engine) {
 	v1 := r.Group("/api/github.com/fullstack-lang/gongrouter/go")
 	{ // insertion point for registrations
+		v1.GET("/v1/editoroutlets", GetController().GetEditorOutlets)
+		v1.GET("/v1/editoroutlets/:id", GetController().GetEditorOutlet)
+		v1.POST("/v1/editoroutlets", GetController().PostEditorOutlet)
+		v1.PATCH("/v1/editoroutlets/:id", GetController().UpdateEditorOutlet)
+		v1.PUT("/v1/editoroutlets/:id", GetController().UpdateEditorOutlet)
+		v1.DELETE("/v1/editoroutlets/:id", GetController().DeleteEditorOutlet)
+
 		v1.GET("/v1/tableoutlets", GetController().GetTableOutlets)
 		v1.GET("/v1/tableoutlets/:id", GetController().GetTableOutlet)
 		v1.POST("/v1/tableoutlets", GetController().PostTableOutlet)
