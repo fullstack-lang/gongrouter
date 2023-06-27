@@ -5,9 +5,9 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point
-	case *Triage:
-		if stage.OnAfterTriageCreateCallback != nil {
-			stage.OnAfterTriageCreateCallback.OnAfterCreate(stage, target)
+	case *TableOutlet:
+		if stage.OnAfterTableOutletCreateCallback != nil {
+			stage.OnAfterTableOutletCreateCallback.OnAfterCreate(stage, target)
 		}
 	default:
 		_ = target
@@ -19,10 +19,10 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 
 	switch oldTarget := any(old).(type) {
 	// insertion point
-	case *Triage:
-		newTarget := any(new).(*Triage)
-		if stage.OnAfterTriageUpdateCallback != nil {
-			stage.OnAfterTriageUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+	case *TableOutlet:
+		newTarget := any(new).(*TableOutlet)
+		if stage.OnAfterTableOutletUpdateCallback != nil {
+			stage.OnAfterTableOutletUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	default:
 		_ = oldTarget
@@ -34,10 +34,10 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 
 	switch front := any(front).(type) {
 	// insertion point
-	case *Triage:
-		if stage.OnAfterTriageDeleteCallback != nil {
-			staged := any(staged).(*Triage)
-			stage.OnAfterTriageDeleteCallback.OnAfterDelete(stage, staged, front)
+	case *TableOutlet:
+		if stage.OnAfterTableOutletDeleteCallback != nil {
+			staged := any(staged).(*TableOutlet)
+			stage.OnAfterTableOutletDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
 	default:
 		_ = front
@@ -49,9 +49,9 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point
-	case *Triage:
-		if stage.OnAfterTriageReadCallback != nil {
-			stage.OnAfterTriageReadCallback.OnAfterRead(stage, target)
+	case *TableOutlet:
+		if stage.OnAfterTableOutletReadCallback != nil {
+			stage.OnAfterTableOutletReadCallback.OnAfterRead(stage, target)
 		}
 	default:
 		_ = target
@@ -64,8 +64,8 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *Triage:
-		stage.OnAfterTriageUpdateCallback = any(callback).(OnAfterUpdateInterface[Triage])
+	case *TableOutlet:
+		stage.OnAfterTableOutletUpdateCallback = any(callback).(OnAfterUpdateInterface[TableOutlet])
 	
 	}
 }
@@ -74,8 +74,8 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *Triage:
-		stage.OnAfterTriageCreateCallback = any(callback).(OnAfterCreateInterface[Triage])
+	case *TableOutlet:
+		stage.OnAfterTableOutletCreateCallback = any(callback).(OnAfterCreateInterface[TableOutlet])
 	
 	}
 }
@@ -84,8 +84,8 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *Triage:
-		stage.OnAfterTriageDeleteCallback = any(callback).(OnAfterDeleteInterface[Triage])
+	case *TableOutlet:
+		stage.OnAfterTableOutletDeleteCallback = any(callback).(OnAfterDeleteInterface[TableOutlet])
 	
 	}
 }
@@ -94,8 +94,8 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 	var instance Type
 	switch any(instance).(type) {
 		// insertion point
-	case *Triage:
-		stage.OnAfterTriageReadCallback = any(callback).(OnAfterReadInterface[Triage])
+	case *TableOutlet:
+		stage.OnAfterTableOutletReadCallback = any(callback).(OnAfterReadInterface[TableOutlet])
 	
 	}
 }

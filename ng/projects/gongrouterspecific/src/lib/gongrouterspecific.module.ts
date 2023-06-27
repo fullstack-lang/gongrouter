@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { GongrouterspecificComponent } from './gongrouterspecific.component';
-import { TriageComponent } from './triage/triage.component';
+import { TableOutletComponent } from './table-outlet/table-outlet.component'
 
 import { Routes, RouterModule } from '@angular/router';
 
@@ -8,14 +8,14 @@ import { Routes, RouterModule } from '@angular/router';
 @NgModule({
   declarations: [
     GongrouterspecificComponent,
-    TriageComponent
+    TableOutletComponent
   ],
   imports: [
     RouterModule,
   ],
   exports: [
     GongrouterspecificComponent,
-    TriageComponent
+    TableOutletComponent
   ]
 })
 export class GongrouterspecificModule { }

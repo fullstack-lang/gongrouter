@@ -110,45 +110,45 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	_ = setValueField 
 
 	// insertion initialization of objects to stage
-	map_Triage_Identifiers := make(map[*Triage]string)
-	_ = map_Triage_Identifiers
+	map_TableOutlet_Identifiers := make(map[*TableOutlet]string)
+	_ = map_TableOutlet_Identifiers
 
-	triageOrdered := []*Triage{}
-	for triage := range stage.Triages {
-		triageOrdered = append(triageOrdered, triage)
+	tableoutletOrdered := []*TableOutlet{}
+	for tableoutlet := range stage.TableOutlets {
+		tableoutletOrdered = append(tableoutletOrdered, tableoutlet)
 	}
-	sort.Slice(triageOrdered[:], func(i, j int) bool {
-		return triageOrdered[i].Name < triageOrdered[j].Name
+	sort.Slice(tableoutletOrdered[:], func(i, j int) bool {
+		return tableoutletOrdered[i].Name < tableoutletOrdered[j].Name
 	})
-	identifiersDecl += "\n\n	// Declarations of staged instances of Triage"
-	for idx, triage := range triageOrdered {
+	identifiersDecl += "\n\n	// Declarations of staged instances of TableOutlet"
+	for idx, tableoutlet := range tableoutletOrdered {
 
-		id = generatesIdentifier("Triage", idx, triage.Name)
-		map_Triage_Identifiers[triage] = id
+		id = generatesIdentifier("TableOutlet", idx, tableoutlet.Name)
+		map_TableOutlet_Identifiers[tableoutlet] = id
 
 		decl = IdentifiersDecls
 		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Triage")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", triage.Name)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "TableOutlet")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", tableoutlet.Name)
 		identifiersDecl += decl
 
-		initializerStatements += "\n\n	// Triage values setup"
+		initializerStatements += "\n\n	// TableOutlet values setup"
 		// Initialisation of values
 		setValueField = StringInitStatement
 		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
 		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(triage.Name))
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(tableoutlet.Name))
 		initializerStatements += setValueField
 
 	}
 
 	// insertion initialization of objects to stage
-	for idx, triage := range triageOrdered {
+	for idx, tableoutlet := range tableoutletOrdered {
 		var setPointerField string
 		_ = setPointerField
 
-		id = generatesIdentifier("Triage", idx, triage.Name)
-		map_Triage_Identifiers[triage] = id
+		id = generatesIdentifier("TableOutlet", idx, tableoutlet.Name)
+		map_TableOutlet_Identifiers[tableoutlet] = id
 
 		// Initialisation of values
 	}

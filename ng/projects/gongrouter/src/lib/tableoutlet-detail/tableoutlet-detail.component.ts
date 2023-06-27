@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
-import { TriageDB } from '../triage-db'
-import { TriageService } from '../triage.service'
+import { TableOutletDB } from '../tableoutlet-db'
+import { TableOutletService } from '../tableoutlet.service'
 
 import { FrontRepoService, FrontRepo, SelectionMode, DialogData } from '../front-repo.service'
 import { MapOfComponents } from '../map-components'
@@ -17,25 +17,25 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angu
 
 import { NullInt64 } from '../null-int64'
 
-// TriageDetailComponent is initilizaed from different routes
-// TriageDetailComponentState detail different cases 
-enum TriageDetailComponentState {
+// TableOutletDetailComponent is initilizaed from different routes
+// TableOutletDetailComponentState detail different cases 
+enum TableOutletDetailComponentState {
 	CREATE_INSTANCE,
 	UPDATE_INSTANCE,
 	// insertion point for declarations of enum values of state
 }
 
 @Component({
-	selector: 'app-triage-detail',
-	templateUrl: './triage-detail.component.html',
-	styleUrls: ['./triage-detail.component.css'],
+	selector: 'app-tableoutlet-detail',
+	templateUrl: './tableoutlet-detail.component.html',
+	styleUrls: ['./tableoutlet-detail.component.css'],
 })
-export class TriageDetailComponent implements OnInit {
+export class TableOutletDetailComponent implements OnInit {
 
 	// insertion point for declarations
 
-	// the TriageDB of interest
-	triage: TriageDB = new TriageDB
+	// the TableOutletDB of interest
+	tableoutlet: TableOutletDB = new TableOutletDB
 
 	// front repo
 	frontRepo: FrontRepo = new FrontRepo
@@ -46,7 +46,7 @@ export class TriageDetailComponent implements OnInit {
 	mapFields_displayAsTextArea = new Map<string, boolean>()
 
 	// the state at initialization (CREATION, UPDATE or CREATE with one association set)
-	state: TriageDetailComponentState = TriageDetailComponentState.CREATE_INSTANCE
+	state: TableOutletDetailComponentState = TableOutletDetailComponentState.CREATE_INSTANCE
 
 	// in UDPATE state, if is the id of the instance to update
 	// in CREATE state with one association set, this is the id of the associated instance
@@ -59,7 +59,7 @@ export class TriageDetailComponent implements OnInit {
 	GONG__StackPath: string = ""
 
 	constructor(
-		private triageService: TriageService,
+		private tableoutletService: TableOutletService,
 		private frontRepoService: FrontRepoService,
 		public dialog: MatDialog,
 		private activatedRoute: ActivatedRoute,
@@ -85,10 +85,10 @@ export class TriageDetailComponent implements OnInit {
 
 		const association = this.activatedRoute.snapshot.paramMap.get('association');
 		if (this.id == 0) {
-			this.state = TriageDetailComponentState.CREATE_INSTANCE
+			this.state = TableOutletDetailComponentState.CREATE_INSTANCE
 		} else {
 			if (this.originStruct == undefined) {
-				this.state = TriageDetailComponentState.UPDATE_INSTANCE
+				this.state = TableOutletDetailComponentState.UPDATE_INSTANCE
 			} else {
 				switch (this.originStructFieldName) {
 					// insertion point for state computation
@@ -98,13 +98,13 @@ export class TriageDetailComponent implements OnInit {
 			}
 		}
 
-		this.getTriage()
+		this.getTableOutlet()
 
 		// observable for changes in structs
-		this.triageService.TriageServiceChanged.subscribe(
+		this.tableoutletService.TableOutletServiceChanged.subscribe(
 			message => {
 				if (message == "post" || message == "update" || message == "delete") {
-					this.getTriage()
+					this.getTableOutlet()
 				}
 			}
 		)
@@ -112,20 +112,20 @@ export class TriageDetailComponent implements OnInit {
 		// insertion point for initialisation of enums list
 	}
 
-	getTriage(): void {
+	getTableOutlet(): void {
 
 		this.frontRepoService.pull(this.GONG__StackPath).subscribe(
 			frontRepo => {
 				this.frontRepo = frontRepo
 
 				switch (this.state) {
-					case TriageDetailComponentState.CREATE_INSTANCE:
-						this.triage = new (TriageDB)
+					case TableOutletDetailComponentState.CREATE_INSTANCE:
+						this.tableoutlet = new (TableOutletDB)
 						break;
-					case TriageDetailComponentState.UPDATE_INSTANCE:
-						let triage = frontRepo.Triages.get(this.id)
-						console.assert(triage != undefined, "missing triage with id:" + this.id)
-						this.triage = triage!
+					case TableOutletDetailComponentState.UPDATE_INSTANCE:
+						let tableoutlet = frontRepo.TableOutlets.get(this.id)
+						console.assert(tableoutlet != undefined, "missing tableoutlet with id:" + this.id)
+						this.tableoutlet = tableoutlet!
 						break;
 					// insertion point for init of association field
 					default:
@@ -151,16 +151,16 @@ export class TriageDetailComponent implements OnInit {
 		// insertion point for translation/nullation of each pointers
 
 		switch (this.state) {
-			case TriageDetailComponentState.UPDATE_INSTANCE:
-				this.triageService.updateTriage(this.triage, this.GONG__StackPath)
-					.subscribe(triage => {
-						this.triageService.TriageServiceChanged.next("update")
+			case TableOutletDetailComponentState.UPDATE_INSTANCE:
+				this.tableoutletService.updateTableOutlet(this.tableoutlet, this.GONG__StackPath)
+					.subscribe(tableoutlet => {
+						this.tableoutletService.TableOutletServiceChanged.next("update")
 					});
 				break;
 			default:
-				this.triageService.postTriage(this.triage, this.GONG__StackPath).subscribe(triage => {
-					this.triageService.TriageServiceChanged.next("post")
-					this.triage = new (TriageDB) // reset fields
+				this.tableoutletService.postTableOutlet(this.tableoutlet, this.GONG__StackPath).subscribe(tableoutlet => {
+					this.tableoutletService.TableOutletServiceChanged.next("post")
+					this.tableoutlet = new (TableOutletDB) // reset fields
 				});
 		}
 	}
@@ -183,7 +183,7 @@ export class TriageDetailComponent implements OnInit {
 		dialogConfig.height = "50%"
 		if (selectionMode == SelectionMode.ONE_MANY_ASSOCIATION_MODE) {
 
-			dialogData.ID = this.triage.ID!
+			dialogData.ID = this.tableoutlet.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
@@ -200,14 +200,14 @@ export class TriageDetailComponent implements OnInit {
 			});
 		}
 		if (selectionMode == SelectionMode.MANY_MANY_ASSOCIATION_MODE) {
-			dialogData.ID = this.triage.ID!
+			dialogData.ID = this.tableoutlet.ID!
 			dialogData.ReversePointer = reverseField
 			dialogData.OrderingMode = false
 			dialogData.SelectionMode = selectionMode
 			dialogData.GONG__StackPath = this.GONG__StackPath
 
 			// set up the source
-			dialogData.SourceStruct = "Triage"
+			dialogData.SourceStruct = "TableOutlet"
 			dialogData.SourceField = sourceField
 
 			// set up the intermediate struct
@@ -237,7 +237,7 @@ export class TriageDetailComponent implements OnInit {
 		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
-			ID: this.triage.ID,
+			ID: this.tableoutlet.ID,
 			ReversePointer: reverseField,
 			OrderingMode: true,
 			GONG__StackPath: this.GONG__StackPath,
@@ -254,8 +254,8 @@ export class TriageDetailComponent implements OnInit {
 	}
 
 	fillUpNameIfEmpty(event: { value: { Name: string; }; }) {
-		if (this.triage.Name == "") {
-			this.triage.Name = event.value.Name
+		if (this.tableoutlet.Name == "") {
+			this.tableoutlet.Name = event.value.Name
 		}
 	}
 

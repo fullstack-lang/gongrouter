@@ -11,20 +11,20 @@ import { BehaviorSubject } from 'rxjs';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { TriageDB } from './triage-db';
+import { TableOutletDB } from './tableoutlet-db';
 
 // insertion point for imports
 
 @Injectable({
   providedIn: 'root'
 })
-export class TriageService {
+export class TableOutletService {
 
   // Kamar Raïmo: Adding a way to communicate between components that share information
   // so that they are notified of a change.
-  TriageServiceChanged: BehaviorSubject<string> = new BehaviorSubject("");
+  TableOutletServiceChanged: BehaviorSubject<string> = new BehaviorSubject("");
 
-  private triagesUrl: string
+  private tableoutletsUrl: string
 
   constructor(
     private http: HttpClient,
@@ -38,36 +38,36 @@ export class TriageService {
     origin = origin.replace("4200", "8080")
 
     // compute path to the service
-    this.triagesUrl = origin + '/api/github.com/fullstack-lang/gongrouter/go/v1/triages';
+    this.tableoutletsUrl = origin + '/api/github.com/fullstack-lang/gongrouter/go/v1/tableoutlets';
   }
 
-  /** GET triages from the server */
-  getTriages(GONG__StackPath: string): Observable<TriageDB[]> {
+  /** GET tableoutlets from the server */
+  getTableOutlets(GONG__StackPath: string): Observable<TableOutletDB[]> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
 
-    return this.http.get<TriageDB[]>(this.triagesUrl, { params: params })
+    return this.http.get<TableOutletDB[]>(this.tableoutletsUrl, { params: params })
       .pipe(
         tap(),
-		// tap(_ => this.log('fetched triages')),
-        catchError(this.handleError<TriageDB[]>('getTriages', []))
+		// tap(_ => this.log('fetched tableoutlets')),
+        catchError(this.handleError<TableOutletDB[]>('getTableOutlets', []))
       );
   }
 
-  /** GET triage by id. Will 404 if id not found */
-  getTriage(id: number, GONG__StackPath: string): Observable<TriageDB> {
+  /** GET tableoutlet by id. Will 404 if id not found */
+  getTableOutlet(id: number, GONG__StackPath: string): Observable<TableOutletDB> {
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
 
-    const url = `${this.triagesUrl}/${id}`;
-    return this.http.get<TriageDB>(url, { params: params }).pipe(
-      // tap(_ => this.log(`fetched triage id=${id}`)),
-      catchError(this.handleError<TriageDB>(`getTriage id=${id}`))
+    const url = `${this.tableoutletsUrl}/${id}`;
+    return this.http.get<TableOutletDB>(url, { params: params }).pipe(
+      // tap(_ => this.log(`fetched tableoutlet id=${id}`)),
+      catchError(this.handleError<TableOutletDB>(`getTableOutlet id=${id}`))
     );
   }
 
-  /** POST: add a new triage to the server */
-  postTriage(triagedb: TriageDB, GONG__StackPath: string): Observable<TriageDB> {
+  /** POST: add a new tableoutlet to the server */
+  postTableOutlet(tableoutletdb: TableOutletDB, GONG__StackPath: string): Observable<TableOutletDB> {
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
 
@@ -77,19 +77,19 @@ export class TriageService {
       params: params
     }
 
-    return this.http.post<TriageDB>(this.triagesUrl, triagedb, httpOptions).pipe(
+    return this.http.post<TableOutletDB>(this.tableoutletsUrl, tableoutletdb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        // this.log(`posted triagedb id=${triagedb.ID}`)
+        // this.log(`posted tableoutletdb id=${tableoutletdb.ID}`)
       }),
-      catchError(this.handleError<TriageDB>('postTriage'))
+      catchError(this.handleError<TableOutletDB>('postTableOutlet'))
     );
   }
 
-  /** DELETE: delete the triagedb from the server */
-  deleteTriage(triagedb: TriageDB | number, GONG__StackPath: string): Observable<TriageDB> {
-    const id = typeof triagedb === 'number' ? triagedb : triagedb.ID;
-    const url = `${this.triagesUrl}/${id}`;
+  /** DELETE: delete the tableoutletdb from the server */
+  deleteTableOutlet(tableoutletdb: TableOutletDB | number, GONG__StackPath: string): Observable<TableOutletDB> {
+    const id = typeof tableoutletdb === 'number' ? tableoutletdb : tableoutletdb.ID;
+    const url = `${this.tableoutletsUrl}/${id}`;
 
     let params = new HttpParams().set("GONG__StackPath", GONG__StackPath)
     let httpOptions = {
@@ -97,16 +97,16 @@ export class TriageService {
       params: params
     };
 
-    return this.http.delete<TriageDB>(url, httpOptions).pipe(
-      tap(_ => this.log(`deleted triagedb id=${id}`)),
-      catchError(this.handleError<TriageDB>('deleteTriage'))
+    return this.http.delete<TableOutletDB>(url, httpOptions).pipe(
+      tap(_ => this.log(`deleted tableoutletdb id=${id}`)),
+      catchError(this.handleError<TableOutletDB>('deleteTableOutlet'))
     );
   }
 
-  /** PUT: update the triagedb on the server */
-  updateTriage(triagedb: TriageDB, GONG__StackPath: string): Observable<TriageDB> {
-    const id = typeof triagedb === 'number' ? triagedb : triagedb.ID;
-    const url = `${this.triagesUrl}/${id}`;
+  /** PUT: update the tableoutletdb on the server */
+  updateTableOutlet(tableoutletdb: TableOutletDB, GONG__StackPath: string): Observable<TableOutletDB> {
+    const id = typeof tableoutletdb === 'number' ? tableoutletdb : tableoutletdb.ID;
+    const url = `${this.tableoutletsUrl}/${id}`;
 
     // insertion point for reset of pointers and reverse pointers (to avoid circular JSON)
 
@@ -116,12 +116,12 @@ export class TriageService {
       params: params
     };
 
-    return this.http.put<TriageDB>(url, triagedb, httpOptions).pipe(
+    return this.http.put<TableOutletDB>(url, tableoutletdb, httpOptions).pipe(
       tap(_ => {
         // insertion point for restoration of reverse pointers
-        // this.log(`updated triagedb id=${triagedb.ID}`)
+        // this.log(`updated tableoutletdb id=${tableoutletdb.ID}`)
       }),
-      catchError(this.handleError<TriageDB>('updateTriage'))
+      catchError(this.handleError<TableOutletDB>('updateTableOutlet'))
     );
   }
 
@@ -131,11 +131,11 @@ export class TriageService {
    * @param operation - name of the operation that failed
    * @param result - optional value to return as the observable result
    */
-  private handleError<T>(operation = 'operation in TriageService', result?: T) {
+  private handleError<T>(operation = 'operation in TableOutletService', result?: T) {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
-      console.error("TriageService" + error); // log to console instead
+      console.error("TableOutletService" + error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
       this.log(`${operation} failed: ${error.message}`);

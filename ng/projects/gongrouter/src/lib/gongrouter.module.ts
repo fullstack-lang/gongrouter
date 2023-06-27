@@ -39,17 +39,17 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { GongstructSelectionService } from './gongstruct-selection.service'
 
 // insertion point for imports 
-import { TriagesTableComponent } from './triages-table/triages-table.component'
-import { TriageSortingComponent } from './triage-sorting/triage-sorting.component'
-import { TriageDetailComponent } from './triage-detail/triage-detail.component'
+import { TableOutletsTableComponent } from './tableoutlets-table/tableoutlets-table.component'
+import { TableOutletSortingComponent } from './tableoutlet-sorting/tableoutlet-sorting.component'
+import { TableOutletDetailComponent } from './tableoutlet-detail/tableoutlet-detail.component'
 
 
 @NgModule({
 	declarations: [
 		// insertion point for declarations 
-		TriagesTableComponent,
-		TriageSortingComponent,
-		TriageDetailComponent,
+		TableOutletsTableComponent,
+		TableOutletSortingComponent,
+		TableOutletDetailComponent,
 
 
 		SplitterComponent,
@@ -90,9 +90,9 @@ import { TriageDetailComponent } from './triage-detail/triage-detail.component'
 	],
 	exports: [
 		// insertion point for declarations 
-		TriagesTableComponent,
-		TriageSortingComponent,
-		TriageDetailComponent,
+		TableOutletsTableComponent,
+		TableOutletSortingComponent,
+		TableOutletDetailComponent,
 
 
 		SplitterComponent,

@@ -30,13 +30,13 @@ type GongStructInterface interface {
 // StageStruct enables storage of staged instances
 // swagger:ignore
 type StageStruct struct { // insertion point for definition of arrays registering instances
-	Triages           map[*Triage]any
-	Triages_mapString map[string]*Triage
+	TableOutlets           map[*TableOutlet]any
+	TableOutlets_mapString map[string]*TableOutlet
 
-	OnAfterTriageCreateCallback OnAfterCreateInterface[Triage]
-	OnAfterTriageUpdateCallback OnAfterUpdateInterface[Triage]
-	OnAfterTriageDeleteCallback OnAfterDeleteInterface[Triage]
-	OnAfterTriageReadCallback   OnAfterReadInterface[Triage]
+	OnAfterTableOutletCreateCallback OnAfterCreateInterface[TableOutlet]
+	OnAfterTableOutletUpdateCallback OnAfterUpdateInterface[TableOutlet]
+	OnAfterTableOutletDeleteCallback OnAfterDeleteInterface[TableOutlet]
+	OnAfterTableOutletReadCallback   OnAfterReadInterface[TableOutlet]
 
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
 
@@ -102,8 +102,8 @@ type BackRepoInterface interface {
 	BackupXL(stage *StageStruct, dirPath string)
 	RestoreXL(stage *StageStruct, dirPath string)
 	// insertion point for Commit and Checkout signatures
-	CommitTriage(triage *Triage)
-	CheckoutTriage(triage *Triage)
+	CommitTableOutlet(tableoutlet *TableOutlet)
+	CheckoutTableOutlet(tableoutlet *TableOutlet)
 	GetLastCommitFromBackNb() uint
 	GetLastPushFromFrontNb() uint
 }
@@ -122,8 +122,8 @@ func GetDefaultStage() *StageStruct {
 func NewStage() (stage *StageStruct) {
 
 	stage = &StageStruct{ // insertion point for array initiatialisation
-		Triages:           make(map[*Triage]any),
-		Triages_mapString: make(map[string]*Triage),
+		TableOutlets:           make(map[*TableOutlet]any),
+		TableOutlets_mapString: make(map[string]*TableOutlet),
 
 		// end of insertion point
 		Map_GongStructName_InstancesNb: make(map[string]int),
@@ -150,7 +150,7 @@ func (stage *StageStruct) Commit() {
 	}
 
 	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["Triage"] = len(stage.Triages)
+	stage.Map_GongStructName_InstancesNb["TableOutlet"] = len(stage.TableOutlets)
 
 }
 
@@ -160,7 +160,7 @@ func (stage *StageStruct) Checkout() {
 	}
 
 	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["Triage"] = len(stage.Triages)
+	stage.Map_GongStructName_InstancesNb["TableOutlet"] = len(stage.TableOutlets)
 
 }
 
@@ -193,70 +193,70 @@ func (stage *StageStruct) RestoreXL(dirPath string) {
 }
 
 // insertion point for cumulative sub template with model space calls
-// Stage puts triage to the model stage
-func (triage *Triage) Stage(stage *StageStruct) *Triage {
-	stage.Triages[triage] = __member
-	stage.Triages_mapString[triage.Name] = triage
+// Stage puts tableoutlet to the model stage
+func (tableoutlet *TableOutlet) Stage(stage *StageStruct) *TableOutlet {
+	stage.TableOutlets[tableoutlet] = __member
+	stage.TableOutlets_mapString[tableoutlet.Name] = tableoutlet
 
-	return triage
+	return tableoutlet
 }
 
-// Unstage removes triage off the model stage
-func (triage *Triage) Unstage(stage *StageStruct) *Triage {
-	delete(stage.Triages, triage)
-	delete(stage.Triages_mapString, triage.Name)
-	return triage
+// Unstage removes tableoutlet off the model stage
+func (tableoutlet *TableOutlet) Unstage(stage *StageStruct) *TableOutlet {
+	delete(stage.TableOutlets, tableoutlet)
+	delete(stage.TableOutlets_mapString, tableoutlet.Name)
+	return tableoutlet
 }
 
-// commit triage to the back repo (if it is already staged)
-func (triage *Triage) Commit(stage *StageStruct) *Triage {
-	if _, ok := stage.Triages[triage]; ok {
+// commit tableoutlet to the back repo (if it is already staged)
+func (tableoutlet *TableOutlet) Commit(stage *StageStruct) *TableOutlet {
+	if _, ok := stage.TableOutlets[tableoutlet]; ok {
 		if stage.BackRepo != nil {
-			stage.BackRepo.CommitTriage(triage)
+			stage.BackRepo.CommitTableOutlet(tableoutlet)
 		}
 	}
-	return triage
+	return tableoutlet
 }
 
-// Checkout triage to the back repo (if it is already staged)
-func (triage *Triage) Checkout(stage *StageStruct) *Triage {
-	if _, ok := stage.Triages[triage]; ok {
+// Checkout tableoutlet to the back repo (if it is already staged)
+func (tableoutlet *TableOutlet) Checkout(stage *StageStruct) *TableOutlet {
+	if _, ok := stage.TableOutlets[tableoutlet]; ok {
 		if stage.BackRepo != nil {
-			stage.BackRepo.CheckoutTriage(triage)
+			stage.BackRepo.CheckoutTableOutlet(tableoutlet)
 		}
 	}
-	return triage
+	return tableoutlet
 }
 
 // for satisfaction of GongStruct interface
-func (triage *Triage) GetName() (res string) {
-	return triage.Name
+func (tableoutlet *TableOutlet) GetName() (res string) {
+	return tableoutlet.Name
 }
 
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
-	CreateORMTriage(Triage *Triage)
+	CreateORMTableOutlet(TableOutlet *TableOutlet)
 }
 
 type AllModelsStructDeleteInterface interface { // insertion point for Callbacks on deletion
-	DeleteORMTriage(Triage *Triage)
+	DeleteORMTableOutlet(TableOutlet *TableOutlet)
 }
 
 func (stage *StageStruct) Reset() { // insertion point for array reset
-	stage.Triages = make(map[*Triage]any)
-	stage.Triages_mapString = make(map[string]*Triage)
+	stage.TableOutlets = make(map[*TableOutlet]any)
+	stage.TableOutlets_mapString = make(map[string]*TableOutlet)
 
 }
 
 func (stage *StageStruct) Nil() { // insertion point for array nil
-	stage.Triages = nil
-	stage.Triages_mapString = nil
+	stage.TableOutlets = nil
+	stage.TableOutlets_mapString = nil
 
 }
 
 func (stage *StageStruct) Unstage() { // insertion point for array nil
-	for triage := range stage.Triages {
-		triage.Unstage(stage)
+	for tableoutlet := range stage.TableOutlets {
+		tableoutlet.Unstage(stage)
 	}
 
 }
@@ -267,7 +267,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	Triage
+	TableOutlet
 }
 
 // Gongstruct is the type parameter for generated generic function that allows
@@ -276,21 +276,21 @@ type Gongstruct interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*Triage
+	*TableOutlet
 	GetName() string
 }
 
 type GongstructSet interface {
 	map[any]any |
 		// insertion point for generic types
-		map[*Triage]any |
+		map[*TableOutlet]any |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
 
 type GongstructMapString interface {
 	map[any]any |
 		// insertion point for generic types
-		map[string]*Triage |
+		map[string]*TableOutlet |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
 
@@ -301,8 +301,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[*Triage]any:
-		return any(&stage.Triages).(*Type)
+	case map[*TableOutlet]any:
+		return any(&stage.TableOutlets).(*Type)
 	default:
 		return nil
 	}
@@ -315,8 +315,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[string]*Triage:
-		return any(&stage.Triages_mapString).(*Type)
+	case map[string]*TableOutlet:
+		return any(&stage.TableOutlets_mapString).(*Type)
 	default:
 		return nil
 	}
@@ -329,8 +329,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case Triage:
-		return any(&stage.Triages).(*map[*Type]any)
+	case TableOutlet:
+		return any(&stage.TableOutlets).(*map[*Type]any)
 	default:
 		return nil
 	}
@@ -343,8 +343,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case Triage:
-		return any(&stage.Triages_mapString).(*map[string]*Type)
+	case TableOutlet:
+		return any(&stage.TableOutlets_mapString).(*map[string]*Type)
 	default:
 		return nil
 	}
@@ -359,8 +359,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 
 	switch any(ret).(type) {
 	// insertion point for instance with special fields
-	case Triage:
-		return any(&Triage{
+	case TableOutlet:
+		return any(&TableOutlet{
 			// Initialisation of associations
 		}).(*Type)
 	default:
@@ -381,8 +381,8 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 
 	switch any(ret).(type) {
 	// insertion point of functions that provide maps for reverse associations
-	// reverse maps of direct associations of Triage
-	case Triage:
+	// reverse maps of direct associations of TableOutlet
+	case TableOutlet:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -402,8 +402,8 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 
 	switch any(ret).(type) {
 	// insertion point of functions that provide maps for reverse associations
-	// reverse maps of direct associations of Triage
-	case Triage:
+	// reverse maps of direct associations of TableOutlet
+	case TableOutlet:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -419,8 +419,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
-	case Triage:
-		res = "Triage"
+	case TableOutlet:
+		res = "TableOutlet"
 	}
 	return res
 }
@@ -432,7 +432,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
-	case Triage:
+	case TableOutlet:
 		res = []string{"Name"}
 	}
 	return
@@ -443,11 +443,11 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct field value
-	case Triage:
+	case TableOutlet:
 		switch fieldName {
 		// string value of fields
 		case "Name":
-			res = any(instance).(Triage).Name
+			res = any(instance).(TableOutlet).Name
 		}
 	}
 	return

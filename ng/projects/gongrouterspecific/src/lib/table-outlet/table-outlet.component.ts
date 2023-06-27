@@ -5,11 +5,11 @@ import * as gongrouter from 'gongrouter'
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'lib-triage',
-  templateUrl: './triage.component.html',
-  styleUrls: ['./triage.component.css']
+  selector: 'lib-table-outlet',
+  templateUrl: './table-outlet.component.html',
+  styleUrls: ['./table-outlet.component.css']
 })
-export class TriageComponent implements OnInit {
+export class TableOutletComponent {
 
   @Input() DataStack: string = ""
   @Input() StructNames: string[] = []
@@ -82,18 +82,18 @@ export class TriageComponent implements OnInit {
       gongroutersFrontRepo => {
         this.gongrouterFrontRepo = gongroutersFrontRepo
 
-        var triageSingloton: gongrouter.TriageDB = new (gongrouter.TriageDB)
+        var tableoutletSingloton: gongrouter.TableOutletDB = new (gongrouter.TableOutletDB)
         var selected: boolean = false
-        for (var triage of this.gongrouterFrontRepo.Triages_array) {
-          triageSingloton = triage
+        for (var tableoutlet of this.gongrouterFrontRepo.TableOutlets_array) {
+          tableoutletSingloton = tableoutlet
           selected = true
         }
         if (!selected) {
-          console.log("no triage matching with name \"" + this.name + "\"")
+          console.log("no tableoutlet matching with name \"" + this.name + "\"")
           return
         }
 
-        this.setTableRouterOutlet(triageSingloton.Name.toLowerCase() + "s")
+        this.setTableRouterOutlet(tableoutletSingloton.Name.toLowerCase() + "s")
 
       }
     )

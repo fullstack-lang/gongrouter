@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TriageComponent } from './triage.component';
+import { TableOutletComponent } from './table-outlet.component';
 
-describe('TriageComponent', () => {
-  let component: TriageComponent;
-  let fixture: ComponentFixture<TriageComponent>;
+describe('TableOutletComponent', () => {
+  let component: TableOutletComponent;
+  let fixture: ComponentFixture<TableOutletComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TriageComponent ]
+      declarations: [ TableOutletComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TriageComponent);
+    fixture = TestBed.createComponent(TableOutletComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

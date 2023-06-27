@@ -8,10 +8,10 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
 
   default = 'Gongrouter Data/Model'
-  triage = "Triage"
-  view = this.triage
+  tableoutlet = "Table Outlet"
+  view = this.tableoutlet
 
-  views: string[] = [this.triage, this.default];
+  views: string[] = [this.tableoutlet, this.default];
 
   DataStack = "gongrouter"
   ModelStacks = "github.com/fullstack-lang/gongrouter/go/models"

@@ -4,15 +4,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
 
 // insertion point sub template for services imports 
-import { TriageDB } from './triage-db'
-import { TriageService } from './triage.service'
+import { TableOutletDB } from './tableoutlet-db'
+import { TableOutletService } from './tableoutlet.service'
 
 
 // FrontRepo stores all instances in a front repository (design pattern repository)
 export class FrontRepo { // insertion point sub template 
-  Triages_array = new Array<TriageDB>(); // array of repo instances
-  Triages = new Map<number, TriageDB>(); // map of repo instances
-  Triages_batch = new Map<number, TriageDB>(); // same but only in last GET (for finding repo instances to delete)
+  TableOutlets_array = new Array<TableOutletDB>(); // array of repo instances
+  TableOutlets = new Map<number, TableOutletDB>(); // map of repo instances
+  TableOutlets_batch = new Map<number, TableOutletDB>(); // same but only in last GET (for finding repo instances to delete)
 }
 
 // the table component is called in different ways
@@ -75,7 +75,7 @@ export class FrontRepoService {
 
   constructor(
     private http: HttpClient, // insertion point sub template 
-    private triageService: TriageService,
+    private tableoutletService: TableOutletService,
   ) { }
 
   // postService provides a post function for each struct name
@@ -106,9 +106,9 @@ export class FrontRepoService {
 
   // typing of observable can be messy in typescript. Therefore, one force the type
   observableFrontRepo: [ // insertion point sub template 
-    Observable<TriageDB[]>,
+    Observable<TableOutletDB[]>,
   ] = [ // insertion point sub template
-      this.triageService.getTriages(this.GONG__StackPath),
+      this.tableoutletService.getTableOutlets(this.GONG__StackPath),
     ];
 
   //
@@ -122,7 +122,7 @@ export class FrontRepoService {
     this.GONG__StackPath = GONG__StackPath
 
     this.observableFrontRepo = [ // insertion point sub template
-      this.triageService.getTriages(this.GONG__StackPath),
+      this.tableoutletService.getTableOutlets(this.GONG__StackPath),
     ]
 
     return new Observable<FrontRepo>(
@@ -131,40 +131,40 @@ export class FrontRepoService {
           this.observableFrontRepo
         ).subscribe(
           ([ // insertion point sub template for declarations 
-            triages_,
+            tableoutlets_,
           ]) => {
             // Typing can be messy with many items. Therefore, type casting is necessary here
             // insertion point sub template for type casting 
-            var triages: TriageDB[]
-            triages = triages_ as TriageDB[]
+            var tableoutlets: TableOutletDB[]
+            tableoutlets = tableoutlets_ as TableOutletDB[]
 
             // 
             // First Step: init map of instances
             // insertion point sub template for init 
             // init the array
-            this.frontRepo.Triages_array = triages
+            this.frontRepo.TableOutlets_array = tableoutlets
 
-            // clear the map that counts Triage in the GET
-            this.frontRepo.Triages_batch.clear()
+            // clear the map that counts TableOutlet in the GET
+            this.frontRepo.TableOutlets_batch.clear()
 
-            triages.forEach(
-              triage => {
-                this.frontRepo.Triages.set(triage.ID, triage)
-                this.frontRepo.Triages_batch.set(triage.ID, triage)
+            tableoutlets.forEach(
+              tableoutlet => {
+                this.frontRepo.TableOutlets.set(tableoutlet.ID, tableoutlet)
+                this.frontRepo.TableOutlets_batch.set(tableoutlet.ID, tableoutlet)
               }
             )
 
-            // clear triages that are absent from the batch
-            this.frontRepo.Triages.forEach(
-              triage => {
-                if (this.frontRepo.Triages_batch.get(triage.ID) == undefined) {
-                  this.frontRepo.Triages.delete(triage.ID)
+            // clear tableoutlets that are absent from the batch
+            this.frontRepo.TableOutlets.forEach(
+              tableoutlet => {
+                if (this.frontRepo.TableOutlets_batch.get(tableoutlet.ID) == undefined) {
+                  this.frontRepo.TableOutlets.delete(tableoutlet.ID)
                 }
               }
             )
 
-            // sort Triages_array array
-            this.frontRepo.Triages_array.sort((t1, t2) => {
+            // sort TableOutlets_array array
+            this.frontRepo.TableOutlets_array.sort((t1, t2) => {
               if (t1.Name > t2.Name) {
                 return 1;
               }
@@ -178,8 +178,8 @@ export class FrontRepoService {
             // 
             // Second Step: redeem pointers between instances (thanks to maps in the First Step)
             // insertion point sub template for redeem 
-            triages.forEach(
-              triage => {
+            tableoutlets.forEach(
+              tableoutlet => {
                 // insertion point sub sub template for ONE-/ZERO-ONE associations pointers redeeming
 
                 // insertion point for redeeming ONE-MANY associations
@@ -196,29 +196,29 @@ export class FrontRepoService {
 
   // insertion point for pull per struct 
 
-  // TriagePull performs a GET on Triage of the stack and redeem association pointers 
-  TriagePull(): Observable<FrontRepo> {
+  // TableOutletPull performs a GET on TableOutlet of the stack and redeem association pointers 
+  TableOutletPull(): Observable<FrontRepo> {
     return new Observable<FrontRepo>(
       (observer) => {
         combineLatest([
-          this.triageService.getTriages(this.GONG__StackPath)
+          this.tableoutletService.getTableOutlets(this.GONG__StackPath)
         ]).subscribe(
           ([ // insertion point sub template 
-            triages,
+            tableoutlets,
           ]) => {
             // init the array
-            this.frontRepo.Triages_array = triages
+            this.frontRepo.TableOutlets_array = tableoutlets
 
-            // clear the map that counts Triage in the GET
-            this.frontRepo.Triages_batch.clear()
+            // clear the map that counts TableOutlet in the GET
+            this.frontRepo.TableOutlets_batch.clear()
 
             // 
             // First Step: init map of instances
             // insertion point sub template 
-            triages.forEach(
-              triage => {
-                this.frontRepo.Triages.set(triage.ID, triage)
-                this.frontRepo.Triages_batch.set(triage.ID, triage)
+            tableoutlets.forEach(
+              tableoutlet => {
+                this.frontRepo.TableOutlets.set(tableoutlet.ID, tableoutlet)
+                this.frontRepo.TableOutlets_batch.set(tableoutlet.ID, tableoutlet)
 
                 // insertion point for redeeming ONE/ZERO-ONE associations
 
@@ -226,11 +226,11 @@ export class FrontRepoService {
               }
             )
 
-            // clear triages that are absent from the GET
-            this.frontRepo.Triages.forEach(
-              triage => {
-                if (this.frontRepo.Triages_batch.get(triage.ID) == undefined) {
-                  this.frontRepo.Triages.delete(triage.ID)
+            // clear tableoutlets that are absent from the GET
+            this.frontRepo.TableOutlets.forEach(
+              tableoutlet => {
+                if (this.frontRepo.TableOutlets_batch.get(tableoutlet.ID) == undefined) {
+                  this.frontRepo.TableOutlets.delete(tableoutlet.ID)
                 }
               }
             )
@@ -249,6 +249,6 @@ export class FrontRepoService {
 }
 
 // insertion point for get unique ID per struct 
-export function getTriageUniqueID(id: number): number {
+export function getTableOutletUniqueID(id: number): number {
   return 31 * id
 }

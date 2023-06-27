@@ -5,8 +5,8 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage
-	case *Triage:
-		ok = stage.IsStagedTriage(target)
+	case *TableOutlet:
+		ok = stage.IsStagedTableOutlet(target)
 
 	default:
 		_ = target
@@ -15,9 +15,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 }
 
 // insertion point for stage per struct
-	func (stage *StageStruct) IsStagedTriage(triage *Triage) (ok bool) {
+	func (stage *StageStruct) IsStagedTableOutlet(tableoutlet *TableOutlet) (ok bool) {
 
-		_, ok = stage.Triages[triage]
+		_, ok = stage.TableOutlets[tableoutlet]
 	
 		return
 	}
@@ -31,8 +31,8 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage branch
-	case *Triage:
-		stage.StageBranchTriage(target)
+	case *TableOutlet:
+		stage.StageBranchTableOutlet(target)
 
 	default:
 		_ = target
@@ -40,14 +40,14 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for stage branch per struct
-func (stage *StageStruct) StageBranchTriage(triage *Triage) {
+func (stage *StageStruct) StageBranchTableOutlet(tableoutlet *TableOutlet) {
 
 	// check if instance is already staged
-	if IsStaged(stage, triage) {
+	if IsStaged(stage, tableoutlet) {
 		return
 	}
 
-	triage.Stage(stage)
+	tableoutlet.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 
@@ -64,8 +64,8 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for unstage branch
-	case *Triage:
-		stage.UnstageBranchTriage(target)
+	case *TableOutlet:
+		stage.UnstageBranchTableOutlet(target)
 
 	default:
 		_ = target
@@ -73,14 +73,14 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for unstage branch per struct
-func (stage *StageStruct) UnstageBranchTriage(triage *Triage) {
+func (stage *StageStruct) UnstageBranchTableOutlet(tableoutlet *TableOutlet) {
 
 	// check if instance is already staged
-	if ! IsStaged(stage, triage) {
+	if ! IsStaged(stage, tableoutlet) {
 		return
 	}
 
-	triage.Unstage(stage)
+	tableoutlet.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 

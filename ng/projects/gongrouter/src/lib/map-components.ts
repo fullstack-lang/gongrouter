@@ -1,17 +1,17 @@
 // insertion point sub template for components imports 
-  import { TriagesTableComponent } from './triages-table/triages-table.component'
-  import { TriageSortingComponent } from './triage-sorting/triage-sorting.component'
+  import { TableOutletsTableComponent } from './tableoutlets-table/tableoutlets-table.component'
+  import { TableOutletSortingComponent } from './tableoutlet-sorting/tableoutlet-sorting.component'
 
 // insertion point sub template for map of components per struct 
-  export const MapOfTriagesComponents: Map<string, any> = new Map([["TriagesTableComponent", TriagesTableComponent],])
-  export const MapOfTriageSortingComponents: Map<string, any> = new Map([["TriageSortingComponent", TriageSortingComponent],])
+  export const MapOfTableOutletsComponents: Map<string, any> = new Map([["TableOutletsTableComponent", TableOutletsTableComponent],])
+  export const MapOfTableOutletSortingComponents: Map<string, any> = new Map([["TableOutletSortingComponent", TableOutletSortingComponent],])
 
 // map of all ng components of the stacks
 export const MapOfComponents: Map<string, any> =
   new Map(
     [
       // insertion point sub template for map of components 
-      ["Triage", MapOfTriagesComponents],
+      ["TableOutlet", MapOfTableOutletsComponents],
     ]
   )
 
@@ -20,6 +20,6 @@ export const MapOfSortingComponents: Map<string, any> =
   new Map(
     [
     // insertion point sub template for map of sorting components 
-      ["Triage", MapOfTriageSortingComponents],
+      ["TableOutlet", MapOfTableOutletSortingComponents],
     ]
   )

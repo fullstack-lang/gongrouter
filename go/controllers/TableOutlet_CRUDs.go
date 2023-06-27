@@ -13,14 +13,14 @@ import (
 )
 
 // declaration in order to justify use of the models import
-var __Triage__dummysDeclaration__ models.Triage
-var __Triage_time__dummyDeclaration time.Duration
+var __TableOutlet__dummysDeclaration__ models.TableOutlet
+var __TableOutlet_time__dummyDeclaration time.Duration
 
-// An TriageID parameter model.
+// An TableOutletID parameter model.
 //
 // This is used for operations that want the ID of an order in the path
-// swagger:parameters getTriage updateTriage deleteTriage
-type TriageID struct {
+// swagger:parameters getTableOutlet updateTableOutlet deleteTableOutlet
+type TableOutletID struct {
 	// The ID of the order
 	//
 	// in: path
@@ -28,29 +28,29 @@ type TriageID struct {
 	ID int64
 }
 
-// TriageInput is a schema that can validate the user’s
+// TableOutletInput is a schema that can validate the user’s
 // input to prevent us from getting invalid data
-// swagger:parameters postTriage updateTriage
-type TriageInput struct {
-	// The Triage to submit or modify
+// swagger:parameters postTableOutlet updateTableOutlet
+type TableOutletInput struct {
+	// The TableOutlet to submit or modify
 	// in: body
-	Triage *orm.TriageAPI
+	TableOutlet *orm.TableOutletAPI
 }
 
-// GetTriages
+// GetTableOutlets
 //
-// swagger:route GET /triages triages getTriages
+// swagger:route GET /tableoutlets tableoutlets getTableOutlets
 //
-// # Get all triages
+// # Get all tableoutlets
 //
 // Responses:
 // default: genericError
 //
-//	200: triageDBResponse
-func (controller *Controller) GetTriages(c *gin.Context) {
+//	200: tableoutletDBResponse
+func (controller *Controller) GetTableOutlets(c *gin.Context) {
 
 	// source slice
-	var triageDBs []orm.TriageDB
+	var tableoutletDBs []orm.TableOutletDB
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -58,13 +58,13 @@ func (controller *Controller) GetTriages(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetTriages", "GONG__StackPath", stackPath)
+			// log.Println("GetTableOutlets", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
-	db := backRepo.BackRepoTriage.GetDB()
+	db := backRepo.BackRepoTableOutlet.GetDB()
 
-	query := db.Find(&triageDBs)
+	query := db.Find(&tableoutletDBs)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -75,29 +75,29 @@ func (controller *Controller) GetTriages(c *gin.Context) {
 	}
 
 	// slice that will be transmitted to the front
-	triageAPIs := make([]orm.TriageAPI, 0)
+	tableoutletAPIs := make([]orm.TableOutletAPI, 0)
 
-	// for each triage, update fields from the database nullable fields
-	for idx := range triageDBs {
-		triageDB := &triageDBs[idx]
-		_ = triageDB
-		var triageAPI orm.TriageAPI
+	// for each tableoutlet, update fields from the database nullable fields
+	for idx := range tableoutletDBs {
+		tableoutletDB := &tableoutletDBs[idx]
+		_ = tableoutletDB
+		var tableoutletAPI orm.TableOutletAPI
 
 		// insertion point for updating fields
-		triageAPI.ID = triageDB.ID
-		triageDB.CopyBasicFieldsToTriage(&triageAPI.Triage)
-		triageAPI.TriagePointersEnconding = triageDB.TriagePointersEnconding
-		triageAPIs = append(triageAPIs, triageAPI)
+		tableoutletAPI.ID = tableoutletDB.ID
+		tableoutletDB.CopyBasicFieldsToTableOutlet(&tableoutletAPI.TableOutlet)
+		tableoutletAPI.TableOutletPointersEnconding = tableoutletDB.TableOutletPointersEnconding
+		tableoutletAPIs = append(tableoutletAPIs, tableoutletAPI)
 	}
 
-	c.JSON(http.StatusOK, triageAPIs)
+	c.JSON(http.StatusOK, tableoutletAPIs)
 }
 
-// PostTriage
+// PostTableOutlet
 //
-// swagger:route POST /triages triages postTriage
+// swagger:route POST /tableoutlets tableoutlets postTableOutlet
 //
-// Creates a triage
+// Creates a tableoutlet
 //
 //	Consumes:
 //	- application/json
@@ -107,7 +107,7 @@ func (controller *Controller) GetTriages(c *gin.Context) {
 //
 //	Responses:
 //	  200: nodeDBResponse
-func (controller *Controller) PostTriage(c *gin.Context) {
+func (controller *Controller) PostTableOutlet(c *gin.Context) {
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -115,14 +115,14 @@ func (controller *Controller) PostTriage(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("PostTriages", "GONG__StackPath", stackPath)
+			// log.Println("PostTableOutlets", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
-	db := backRepo.BackRepoTriage.GetDB()
+	db := backRepo.BackRepoTableOutlet.GetDB()
 
 	// Validate input
-	var input orm.TriageAPI
+	var input orm.TableOutletAPI
 
 	err := c.ShouldBindJSON(&input)
 	if err != nil {
@@ -134,12 +134,12 @@ func (controller *Controller) PostTriage(c *gin.Context) {
 		return
 	}
 
-	// Create triage
-	triageDB := orm.TriageDB{}
-	triageDB.TriagePointersEnconding = input.TriagePointersEnconding
-	triageDB.CopyBasicFieldsFromTriage(&input.Triage)
+	// Create tableoutlet
+	tableoutletDB := orm.TableOutletDB{}
+	tableoutletDB.TableOutletPointersEnconding = input.TableOutletPointersEnconding
+	tableoutletDB.CopyBasicFieldsFromTableOutlet(&input.TableOutlet)
 
-	query := db.Create(&triageDB)
+	query := db.Create(&tableoutletDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -150,31 +150,31 @@ func (controller *Controller) PostTriage(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	backRepo.BackRepoTriage.CheckoutPhaseOneInstance(&triageDB)
-	triage := backRepo.BackRepoTriage.Map_TriageDBID_TriagePtr[triageDB.ID]
+	backRepo.BackRepoTableOutlet.CheckoutPhaseOneInstance(&tableoutletDB)
+	tableoutlet := backRepo.BackRepoTableOutlet.Map_TableOutletDBID_TableOutletPtr[tableoutletDB.ID]
 
-	if triage != nil {
-		models.AfterCreateFromFront(backRepo.GetStage(), triage)
+	if tableoutlet != nil {
+		models.AfterCreateFromFront(backRepo.GetStage(), tableoutlet)
 	}
 
 	// a POST is equivalent to a back repo commit increase
 	// (this will be improved with implementation of unit of work design pattern)
 	backRepo.IncrementPushFromFrontNb()
 
-	c.JSON(http.StatusOK, triageDB)
+	c.JSON(http.StatusOK, tableoutletDB)
 }
 
-// GetTriage
+// GetTableOutlet
 //
-// swagger:route GET /triages/{ID} triages getTriage
+// swagger:route GET /tableoutlets/{ID} tableoutlets getTableOutlet
 //
-// Gets the details for a triage.
+// Gets the details for a tableoutlet.
 //
 // Responses:
 // default: genericError
 //
-//	200: triageDBResponse
-func (controller *Controller) GetTriage(c *gin.Context) {
+//	200: tableoutletDBResponse
+func (controller *Controller) GetTableOutlet(c *gin.Context) {
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -182,15 +182,15 @@ func (controller *Controller) GetTriage(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("GetTriage", "GONG__StackPath", stackPath)
+			// log.Println("GetTableOutlet", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
-	db := backRepo.BackRepoTriage.GetDB()
+	db := backRepo.BackRepoTableOutlet.GetDB()
 
-	// Get triageDB in DB
-	var triageDB orm.TriageDB
-	if err := db.First(&triageDB, c.Param("id")).Error; err != nil {
+	// Get tableoutletDB in DB
+	var tableoutletDB orm.TableOutletDB
+	if err := db.First(&tableoutletDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -199,25 +199,25 @@ func (controller *Controller) GetTriage(c *gin.Context) {
 		return
 	}
 
-	var triageAPI orm.TriageAPI
-	triageAPI.ID = triageDB.ID
-	triageAPI.TriagePointersEnconding = triageDB.TriagePointersEnconding
-	triageDB.CopyBasicFieldsToTriage(&triageAPI.Triage)
+	var tableoutletAPI orm.TableOutletAPI
+	tableoutletAPI.ID = tableoutletDB.ID
+	tableoutletAPI.TableOutletPointersEnconding = tableoutletDB.TableOutletPointersEnconding
+	tableoutletDB.CopyBasicFieldsToTableOutlet(&tableoutletAPI.TableOutlet)
 
-	c.JSON(http.StatusOK, triageAPI)
+	c.JSON(http.StatusOK, tableoutletAPI)
 }
 
-// UpdateTriage
+// UpdateTableOutlet
 //
-// swagger:route PATCH /triages/{ID} triages updateTriage
+// swagger:route PATCH /tableoutlets/{ID} tableoutlets updateTableOutlet
 //
-// # Update a triage
+// # Update a tableoutlet
 //
 // Responses:
 // default: genericError
 //
-//	200: triageDBResponse
-func (controller *Controller) UpdateTriage(c *gin.Context) {
+//	200: tableoutletDBResponse
+func (controller *Controller) UpdateTableOutlet(c *gin.Context) {
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -225,14 +225,14 @@ func (controller *Controller) UpdateTriage(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("UpdateTriage", "GONG__StackPath", stackPath)
+			// log.Println("UpdateTableOutlet", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
-	db := backRepo.BackRepoTriage.GetDB()
+	db := backRepo.BackRepoTableOutlet.GetDB()
 
 	// Validate input
-	var input orm.TriageAPI
+	var input orm.TableOutletAPI
 	if err := c.ShouldBindJSON(&input); err != nil {
 		log.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -240,10 +240,10 @@ func (controller *Controller) UpdateTriage(c *gin.Context) {
 	}
 
 	// Get model if exist
-	var triageDB orm.TriageDB
+	var tableoutletDB orm.TableOutletDB
 
-	// fetch the triage
-	query := db.First(&triageDB, c.Param("id"))
+	// fetch the tableoutlet
+	query := db.First(&tableoutletDB, c.Param("id"))
 
 	if query.Error != nil {
 		var returnError GenericError
@@ -255,10 +255,10 @@ func (controller *Controller) UpdateTriage(c *gin.Context) {
 	}
 
 	// update
-	triageDB.CopyBasicFieldsFromTriage(&input.Triage)
-	triageDB.TriagePointersEnconding = input.TriagePointersEnconding
+	tableoutletDB.CopyBasicFieldsFromTableOutlet(&input.TableOutlet)
+	tableoutletDB.TableOutletPointersEnconding = input.TableOutletPointersEnconding
 
-	query = db.Model(&triageDB).Updates(triageDB)
+	query = db.Model(&tableoutletDB).Updates(tableoutletDB)
 	if query.Error != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
@@ -269,13 +269,13 @@ func (controller *Controller) UpdateTriage(c *gin.Context) {
 	}
 
 	// get an instance (not staged) from DB instance, and call callback function
-	triageNew := new(models.Triage)
-	triageDB.CopyBasicFieldsToTriage(triageNew)
+	tableoutletNew := new(models.TableOutlet)
+	tableoutletDB.CopyBasicFieldsToTableOutlet(tableoutletNew)
 
 	// get stage instance from DB instance, and call callback function
-	triageOld := backRepo.BackRepoTriage.Map_TriageDBID_TriagePtr[triageDB.ID]
-	if triageOld != nil {
-		models.AfterUpdateFromFront(backRepo.GetStage(), triageOld, triageNew)
+	tableoutletOld := backRepo.BackRepoTableOutlet.Map_TableOutletDBID_TableOutletPtr[tableoutletDB.ID]
+	if tableoutletOld != nil {
+		models.AfterUpdateFromFront(backRepo.GetStage(), tableoutletOld, tableoutletNew)
 	}
 
 	// an UPDATE generates a back repo commit increase
@@ -284,20 +284,20 @@ func (controller *Controller) UpdateTriage(c *gin.Context) {
 	// generates a checkout
 	backRepo.IncrementPushFromFrontNb()
 
-	// return status OK with the marshalling of the the triageDB
-	c.JSON(http.StatusOK, triageDB)
+	// return status OK with the marshalling of the the tableoutletDB
+	c.JSON(http.StatusOK, tableoutletDB)
 }
 
-// DeleteTriage
+// DeleteTableOutlet
 //
-// swagger:route DELETE /triages/{ID} triages deleteTriage
+// swagger:route DELETE /tableoutlets/{ID} tableoutlets deleteTableOutlet
 //
-// # Delete a triage
+// # Delete a tableoutlet
 //
 // default: genericError
 //
-//	200: triageDBResponse
-func (controller *Controller) DeleteTriage(c *gin.Context) {
+//	200: tableoutletDBResponse
+func (controller *Controller) DeleteTableOutlet(c *gin.Context) {
 
 	values := c.Request.URL.Query()
 	stackPath := ""
@@ -305,15 +305,15 @@ func (controller *Controller) DeleteTriage(c *gin.Context) {
 		value := values["GONG__StackPath"]
 		if len(value) == 1 {
 			stackPath = value[0]
-			// log.Println("DeleteTriage", "GONG__StackPath", stackPath)
+			// log.Println("DeleteTableOutlet", "GONG__StackPath", stackPath)
 		}
 	}
 	backRepo := controller.Map_BackRepos[stackPath]
-	db := backRepo.BackRepoTriage.GetDB()
+	db := backRepo.BackRepoTableOutlet.GetDB()
 
 	// Get model if exist
-	var triageDB orm.TriageDB
-	if err := db.First(&triageDB, c.Param("id")).Error; err != nil {
+	var tableoutletDB orm.TableOutletDB
+	if err := db.First(&tableoutletDB, c.Param("id")).Error; err != nil {
 		var returnError GenericError
 		returnError.Body.Code = http.StatusBadRequest
 		returnError.Body.Message = err.Error()
@@ -323,16 +323,16 @@ func (controller *Controller) DeleteTriage(c *gin.Context) {
 	}
 
 	// with gorm.Model field, default delete is a soft delete. Unscoped() force delete
-	db.Unscoped().Delete(&triageDB)
+	db.Unscoped().Delete(&tableoutletDB)
 
 	// get an instance (not staged) from DB instance, and call callback function
-	triageDeleted := new(models.Triage)
-	triageDB.CopyBasicFieldsToTriage(triageDeleted)
+	tableoutletDeleted := new(models.TableOutlet)
+	tableoutletDB.CopyBasicFieldsToTableOutlet(tableoutletDeleted)
 
 	// get stage instance from DB instance, and call callback function
-	triageStaged := backRepo.BackRepoTriage.Map_TriageDBID_TriagePtr[triageDB.ID]
-	if triageStaged != nil {
-		models.AfterDeleteFromFront(backRepo.GetStage(), triageStaged, triageDeleted)
+	tableoutletStaged := backRepo.BackRepoTableOutlet.Map_TableOutletDBID_TableOutletPtr[tableoutletDB.ID]
+	if tableoutletStaged != nil {
+		models.AfterDeleteFromFront(backRepo.GetStage(), tableoutletStaged, tableoutletDeleted)
 	}
 
 	// a DELETE generates a back repo commit increase

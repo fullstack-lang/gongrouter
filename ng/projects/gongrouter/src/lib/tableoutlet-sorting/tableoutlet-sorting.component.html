@@ -1,5 +1,5 @@
 <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-<div class="example-box" *ngFor="let triage of associatedTriages" cdkDrag>{{triage.Name}}</div>
+<div class="example-box" *ngFor="let tableoutlet of associatedTableOutlets" cdkDrag>{{tableoutlet.Name}}</div>
 </div>
 <button class="table__save" color="primary" mat-raised-button (click)="save()">
 Save

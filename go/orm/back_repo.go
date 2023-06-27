@@ -21,7 +21,7 @@ import (
 // BackRepoStruct supports callback functions
 type BackRepoStruct struct {
 	// insertion point for per struct back repo declarations
-	BackRepoTriage BackRepoTriageStruct
+	BackRepoTableOutlet BackRepoTableOutletStruct
 
 	CommitFromBackNb uint // records commit increments when performed by the back
 
@@ -59,7 +59,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 	}
 
 	err = db.AutoMigrate( // insertion point for reference to structs
-		&TriageDB{},
+		&TableOutletDB{},
 	)
 
 	if err != nil {
@@ -70,10 +70,10 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 	backRepo = new(BackRepoStruct)
 
 	// insertion point for per struct back repo declarations
-	backRepo.BackRepoTriage = BackRepoTriageStruct{
-		Map_TriageDBID_TriagePtr: make(map[uint]*models.Triage, 0),
-		Map_TriageDBID_TriageDB:  make(map[uint]*TriageDB, 0),
-		Map_TriagePtr_TriageDBID: make(map[*models.Triage]uint, 0),
+	backRepo.BackRepoTableOutlet = BackRepoTableOutletStruct{
+		Map_TableOutletDBID_TableOutletPtr: make(map[uint]*models.TableOutlet, 0),
+		Map_TableOutletDBID_TableOutletDB:  make(map[uint]*TableOutletDB, 0),
+		Map_TableOutletPtr_TableOutletDBID: make(map[*models.TableOutlet]uint, 0),
 
 		db:    db,
 		stage: stage,
@@ -123,10 +123,10 @@ func (backRepo *BackRepoStruct) IncrementPushFromFrontNb() uint {
 // Commit the BackRepoStruct inner variables and link to the database
 func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	// insertion point for per struct back repo phase one commit
-	backRepo.BackRepoTriage.CommitPhaseOne(stage)
+	backRepo.BackRepoTableOutlet.CommitPhaseOne(stage)
 
 	// insertion point for per struct back repo phase two commit
-	backRepo.BackRepoTriage.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoTableOutlet.CommitPhaseTwo(backRepo)
 
 	backRepo.IncrementCommitFromBackNb()
 }
@@ -134,10 +134,10 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 // Checkout the database into the stage
 func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	// insertion point for per struct back repo phase one commit
-	backRepo.BackRepoTriage.CheckoutPhaseOne()
+	backRepo.BackRepoTableOutlet.CheckoutPhaseOne()
 
 	// insertion point for per struct back repo phase two commit
-	backRepo.BackRepoTriage.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoTableOutlet.CheckoutPhaseTwo(backRepo)
 }
 
 var _backRepo *BackRepoStruct
@@ -164,7 +164,7 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 	os.MkdirAll(dirPath, os.ModePerm)
 
 	// insertion point for per struct backup
-	backRepo.BackRepoTriage.Backup(dirPath)
+	backRepo.BackRepoTableOutlet.Backup(dirPath)
 }
 
 // Backup in XL the BackRepoStruct
@@ -175,7 +175,7 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 	file := xlsx.NewFile()
 
 	// insertion point for per struct backup
-	backRepo.BackRepoTriage.BackupXL(file)
+	backRepo.BackRepoTableOutlet.BackupXL(file)
 
 	var b bytes.Buffer
 	writer := bufio.NewWriter(&b)
@@ -200,14 +200,14 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 	//
 
 	// insertion point for per struct backup
-	backRepo.BackRepoTriage.RestorePhaseOne(dirPath)
+	backRepo.BackRepoTableOutlet.RestorePhaseOne(dirPath)
 
 	//
 	// restauration second phase (reindex pointers with the new ID)
 	//
 
 	// insertion point for per struct backup
-	backRepo.BackRepoTriage.RestorePhaseTwo()
+	backRepo.BackRepoTableOutlet.RestorePhaseTwo()
 
 	backRepo.stage.Checkout()
 }
@@ -235,7 +235,7 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 	//
 
 	// insertion point for per struct backup
-	backRepo.BackRepoTriage.RestoreXLPhaseOne(file)
+	backRepo.BackRepoTableOutlet.RestoreXLPhaseOne(file)
 
 	// commit the restored stage
 	backRepo.stage.Commit()

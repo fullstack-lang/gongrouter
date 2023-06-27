@@ -303,7 +303,7 @@ func ParseAstFileFromAst(stage *StageStruct, inFile *ast.File, fset *token.FileS
 var __gong__map_Indentifiers_gongstructName = make(map[string]string)
 
 // insertion point for identifiers maps
-var __gong__map_Triage = make(map[string]*Triage)
+var __gong__map_TableOutlet = make(map[string]*TableOutlet)
 
 // Parser needs to be configured for having the [Name1.Name2] or [pkg.Name1] ...
 // to be recognized as a proper identifier.
@@ -476,10 +476,10 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 									// this is the place where an instance is created
 									switch gongstructName {
 									// insertion point for identifiers
-									case "Triage":
-										instanceTriage := (&Triage{Name: instanceName}).Stage(stage)
-										instance = any(instanceTriage)
-										__gong__map_Triage[identifier] = instanceTriage
+									case "TableOutlet":
+										instanceTableOutlet := (&TableOutlet{Name: instanceName}).Stage(stage)
+										instance = any(instanceTableOutlet)
+										__gong__map_TableOutlet[identifier] = instanceTableOutlet
 									}
 									__gong__map_Indentifiers_gongstructName[identifier] = gongstructName
 									return
@@ -516,7 +516,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 						}
 						switch gongstructName {
 						// insertion point for basic lit assignments
-						case "Triage":
+						case "TableOutlet":
 							switch fieldName {
 							// insertion point for date assign code
 							}
@@ -545,7 +545,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					}
 					switch gongstructName {
 					// insertion point for slice of pointers assignments
-					case "Triage":
+					case "TableOutlet":
 						switch fieldName {
 						// insertion point for slice of pointers assign code
 						}
@@ -598,13 +598,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 
 			switch gongstructName {
 			// insertion point for basic lit assignments
-			case "Triage":
+			case "TableOutlet":
 				switch fieldName {
 				// insertion point for field dependant code
 				case "Name":
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
-					__gong__map_Triage[identifier].Name = fielValue
+					__gong__map_TableOutlet[identifier].Name = fielValue
 				}
 			}
 		case *ast.Ident:
@@ -620,7 +620,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 			}
 			switch gongstructName {
 			// insertion point for bool & pointers assignments
-			case "Triage":
+			case "TableOutlet":
 				switch fieldName {
 				// insertion point for field dependant code
 				}
@@ -652,7 +652,7 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				_ = enumValue
 				switch gongstructName {
 				// insertion point for enums assignments
-				case "Triage":
+				case "TableOutlet":
 					switch fieldName {
 					// insertion point for enum assign code
 					}

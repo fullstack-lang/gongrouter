@@ -14,8 +14,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 const allowMultiSelect = true;
 
 import { ActivatedRoute, Router, RouterState } from '@angular/router';
-import { TriageDB } from '../triage-db'
-import { TriageService } from '../triage.service'
+import { TableOutletDB } from '../tableoutlet-db'
+import { TableOutletService } from '../tableoutlet.service'
 
 // insertion point for additional imports
 
@@ -31,26 +31,26 @@ enum TableComponentMode {
 
 // generated table component
 @Component({
-  selector: 'app-triagestable',
-  templateUrl: './triages-table.component.html',
-  styleUrls: ['./triages-table.component.css'],
+  selector: 'app-tableoutletstable',
+  templateUrl: './tableoutlets-table.component.html',
+  styleUrls: ['./tableoutlets-table.component.css'],
 })
-export class TriagesTableComponent implements OnInit {
+export class TableOutletsTableComponent implements OnInit {
 
   @Input() GONG__StackPath: string = ""
 
   // mode at invocation
   mode: TableComponentMode = TableComponentMode.DISPLAY_MODE
 
-  // used if the component is called as a selection component of Triage instances
-  selection: SelectionModel<TriageDB> = new (SelectionModel)
-  initialSelection = new Array<TriageDB>()
+  // used if the component is called as a selection component of TableOutlet instances
+  selection: SelectionModel<TableOutletDB> = new (SelectionModel)
+  initialSelection = new Array<TableOutletDB>()
 
   // the data source for the table
-  triages: TriageDB[] = []
-  matTableDataSource: MatTableDataSource<TriageDB> = new (MatTableDataSource)
+  tableoutlets: TableOutletDB[] = []
+  matTableDataSource: MatTableDataSource<TableOutletDB> = new (MatTableDataSource)
 
-  // front repo, that will be referenced by this.triages
+  // front repo, that will be referenced by this.tableoutlets
   frontRepo: FrontRepo = new (FrontRepo)
 
   // displayedColumns is referenced by the MatTable component for specify what columns
@@ -66,14 +66,14 @@ export class TriagesTableComponent implements OnInit {
   ngAfterViewInit() {
 
     // enable sorting on all fields (including pointers and reverse pointer)
-    this.matTableDataSource.sortingDataAccessor = (triageDB: TriageDB, property: string) => {
+    this.matTableDataSource.sortingDataAccessor = (tableoutletDB: TableOutletDB, property: string) => {
       switch (property) {
         case 'ID':
-          return triageDB.ID
+          return tableoutletDB.ID
 
         // insertion point for specific sorting accessor
         case 'Name':
-          return triageDB.Name;
+          return tableoutletDB.Name;
 
         default:
           console.assert(false, "Unknown field")
@@ -82,14 +82,14 @@ export class TriagesTableComponent implements OnInit {
     };
 
     // enable filtering on all fields (including pointers and reverse pointer, which is not done by default)
-    this.matTableDataSource.filterPredicate = (triageDB: TriageDB, filter: string) => {
+    this.matTableDataSource.filterPredicate = (tableoutletDB: TableOutletDB, filter: string) => {
 
       // filtering is based on finding a lower case filter into a concatenated string
-      // the triageDB properties
+      // the tableoutletDB properties
       let mergedContent = ""
 
       // insertion point for merging of fields
-      mergedContent += triageDB.Name.toLowerCase()
+      mergedContent += tableoutletDB.Name.toLowerCase()
 
       let isSelected = mergedContent.includes(filter.toLowerCase())
       return isSelected
@@ -105,11 +105,11 @@ export class TriagesTableComponent implements OnInit {
   }
 
   constructor(
-    private triageService: TriageService,
+    private tableoutletService: TableOutletService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of triage instances
-    public dialogRef: MatDialogRef<TriagesTableComponent>,
+    // not null if the component is called as a selection component of tableoutlet instances
+    public dialogRef: MatDialogRef<TableOutletsTableComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -135,10 +135,10 @@ export class TriagesTableComponent implements OnInit {
     }
 
     // observable for changes in structs
-    this.triageService.TriageServiceChanged.subscribe(
+    this.tableoutletService.TableOutletServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
-          this.getTriages()
+          this.getTableOutlets()
         }
       }
     )
@@ -150,7 +150,7 @@ export class TriagesTableComponent implements OnInit {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
       ]
-      this.selection = new SelectionModel<TriageDB>(allowMultiSelect, this.initialSelection);
+      this.selection = new SelectionModel<TableOutletDB>(allowMultiSelect, this.initialSelection);
     }
 
   }
@@ -161,84 +161,84 @@ export class TriagesTableComponent implements OnInit {
       this.GONG__StackPath = stackPath
     }
 
-    this.getTriages()
+    this.getTableOutlets()
 
-    this.matTableDataSource = new MatTableDataSource(this.triages)
+    this.matTableDataSource = new MatTableDataSource(this.tableoutlets)
   }
 
-  getTriages(): void {
+  getTableOutlets(): void {
     this.frontRepoService.pull(this.GONG__StackPath).subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
-        this.triages = this.frontRepo.Triages_array;
+        this.tableoutlets = this.frontRepo.TableOutlets_array;
 
         // insertion point for time duration Recoveries
         // insertion point for enum int Recoveries
 
         // in case the component is called as a selection component
         if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
-          for (let triage of this.triages) {
+          for (let tableoutlet of this.tableoutlets) {
             let ID = this.dialogData.ID
-            let revPointer = triage[this.dialogData.ReversePointer as keyof TriageDB] as unknown as NullInt64
+            let revPointer = tableoutlet[this.dialogData.ReversePointer as keyof TableOutletDB] as unknown as NullInt64
             if (revPointer.Int64 == ID) {
-              this.initialSelection.push(triage)
+              this.initialSelection.push(tableoutlet)
             }
-            this.selection = new SelectionModel<TriageDB>(allowMultiSelect, this.initialSelection);
+            this.selection = new SelectionModel<TableOutletDB>(allowMultiSelect, this.initialSelection);
           }
         }
 
         if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
-          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, TriageDB>
+          let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, TableOutletDB>
           let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
-          // we associates on sourceInstance of type SourceStruct with a MANY MANY associations to TriageDB
+          // we associates on sourceInstance of type SourceStruct with a MANY MANY associations to TableOutletDB
           // the field name is sourceField
-          let sourceFieldArray = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]! as unknown as TriageDB[]
+          let sourceFieldArray = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]! as unknown as TableOutletDB[]
           if (sourceFieldArray != null) {
             for (let associationInstance of sourceFieldArray) {
-              let triage = associationInstance[this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as TriageDB
-              this.initialSelection.push(triage)
+              let tableoutlet = associationInstance[this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as TableOutletDB
+              this.initialSelection.push(tableoutlet)
             }
           }
 
-          this.selection = new SelectionModel<TriageDB>(allowMultiSelect, this.initialSelection);
+          this.selection = new SelectionModel<TableOutletDB>(allowMultiSelect, this.initialSelection);
         }
 
         // update the mat table data source
-        this.matTableDataSource.data = this.triages
+        this.matTableDataSource.data = this.tableoutlets
       }
     )
   }
 
-  // newTriage initiate a new triage
-  // create a new Triage objet
-  newTriage() {
+  // newTableOutlet initiate a new tableoutlet
+  // create a new TableOutlet objet
+  newTableOutlet() {
   }
 
-  deleteTriage(triageID: number, triage: TriageDB) {
-    // list of triages is truncated of triage before the delete
-    this.triages = this.triages.filter(h => h !== triage);
+  deleteTableOutlet(tableoutletID: number, tableoutlet: TableOutletDB) {
+    // list of tableoutlets is truncated of tableoutlet before the delete
+    this.tableoutlets = this.tableoutlets.filter(h => h !== tableoutlet);
 
-    this.triageService.deleteTriage(triageID, this.GONG__StackPath).subscribe(
-      triage => {
-        this.triageService.TriageServiceChanged.next("delete")
+    this.tableoutletService.deleteTableOutlet(tableoutletID, this.GONG__StackPath).subscribe(
+      tableoutlet => {
+        this.tableoutletService.TableOutletServiceChanged.next("delete")
       }
     );
   }
 
-  editTriage(triageID: number, triage: TriageDB) {
+  editTableOutlet(tableoutletID: number, tableoutlet: TableOutletDB) {
 
   }
 
   // set editor outlet
-  setEditorRouterOutlet(triageID: number) {
+  setEditorRouterOutlet(tableoutletID: number) {
     let outletName = this.routeService.getEditorOutlet(this.GONG__StackPath)
-    let fullPath = this.routeService.getPathRoot() + "-" + "triage" + "-detail"
+    let fullPath = this.routeService.getPathRoot() + "-" + "tableoutlet" + "-detail"
 
     let outletConf: any = {}
-    outletConf[outletName] = [fullPath, triageID, this.GONG__StackPath]
+    outletConf[outletName] = [fullPath, tableoutletID, this.GONG__StackPath]
 
     this.router.navigate([{ outlets: outletConf }])
   }
@@ -246,7 +246,7 @@ export class TriagesTableComponent implements OnInit {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.triages.length;
+    const numRows = this.tableoutlets.length;
     return numSelected === numRows;
   }
 
@@ -254,39 +254,39 @@ export class TriagesTableComponent implements OnInit {
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
-      this.triages.forEach(row => this.selection.select(row));
+      this.tableoutlets.forEach(row => this.selection.select(row));
   }
 
   save() {
 
     if (this.mode == TableComponentMode.ONE_MANY_ASSOCIATION_MODE) {
 
-      let toUpdate = new Set<TriageDB>()
+      let toUpdate = new Set<TableOutletDB>()
 
-      // reset all initial selection of triage that belong to triage
-      for (let triage of this.initialSelection) {
-        let index = triage[this.dialogData.ReversePointer as keyof TriageDB] as unknown as NullInt64
+      // reset all initial selection of tableoutlet that belong to tableoutlet
+      for (let tableoutlet of this.initialSelection) {
+        let index = tableoutlet[this.dialogData.ReversePointer as keyof TableOutletDB] as unknown as NullInt64
         index.Int64 = 0
         index.Valid = true
-        toUpdate.add(triage)
+        toUpdate.add(tableoutlet)
 
       }
 
-      // from selection, set triage that belong to triage
-      for (let triage of this.selection.selected) {
+      // from selection, set tableoutlet that belong to tableoutlet
+      for (let tableoutlet of this.selection.selected) {
         let ID = this.dialogData.ID as number
-        let reversePointer = triage[this.dialogData.ReversePointer as keyof TriageDB] as unknown as NullInt64
+        let reversePointer = tableoutlet[this.dialogData.ReversePointer as keyof TableOutletDB] as unknown as NullInt64
         reversePointer.Int64 = ID
         reversePointer.Valid = true
-        toUpdate.add(triage)
+        toUpdate.add(tableoutlet)
       }
 
 
-      // update all triage (only update selection & initial selection)
-      for (let triage of toUpdate) {
-        this.triageService.updateTriage(triage, this.GONG__StackPath)
-          .subscribe(triage => {
-            this.triageService.TriageServiceChanged.next("update")
+      // update all tableoutlet (only update selection & initial selection)
+      for (let tableoutlet of toUpdate) {
+        this.tableoutletService.updateTableOutlet(tableoutlet, this.GONG__StackPath)
+          .subscribe(tableoutlet => {
+            this.tableoutletService.TableOutletServiceChanged.next("update")
           });
       }
     }
@@ -294,26 +294,26 @@ export class TriagesTableComponent implements OnInit {
     if (this.mode == TableComponentMode.MANY_MANY_ASSOCIATION_MODE) {
 
       // get the source instance via the map of instances in the front repo
-      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, TriageDB>
+      let mapOfSourceInstances = this.frontRepo[this.dialogData.SourceStruct + "s" as keyof FrontRepo] as Map<number, TableOutletDB>
       let sourceInstance = mapOfSourceInstances.get(this.dialogData.ID)!
 
       // First, parse all instance of the association struct and remove the instance
       // that have unselect
-      let unselectedTriage = new Set<number>()
-      for (let triage of this.initialSelection) {
-        if (this.selection.selected.includes(triage)) {
-          // console.log("triage " + triage.Name + " is still selected")
+      let unselectedTableOutlet = new Set<number>()
+      for (let tableoutlet of this.initialSelection) {
+        if (this.selection.selected.includes(tableoutlet)) {
+          // console.log("tableoutlet " + tableoutlet.Name + " is still selected")
         } else {
-          console.log("triage " + triage.Name + " has been unselected")
-          unselectedTriage.add(triage.ID)
-          console.log("is unselected " + unselectedTriage.has(triage.ID))
+          console.log("tableoutlet " + tableoutlet.Name + " has been unselected")
+          unselectedTableOutlet.add(tableoutlet.ID)
+          console.log("is unselected " + unselectedTableOutlet.has(tableoutlet.ID))
         }
       }
 
       // delete the association instance
       let associationInstance = sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]
-      let triage = associationInstance![this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as TriageDB
-      if (unselectedTriage.has(triage.ID)) {
+      let tableoutlet = associationInstance![this.dialogData.IntermediateStructField as keyof typeof associationInstance] as unknown as TableOutletDB
+      if (unselectedTableOutlet.has(tableoutlet.ID)) {
         this.frontRepoService.deleteService(this.dialogData.IntermediateStruct, associationInstance)
 
 
@@ -321,38 +321,38 @@ export class TriagesTableComponent implements OnInit {
 
       // is the source array is empty create it
       if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] == undefined) {
-        (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] as unknown as Array<TriageDB>) = new Array<TriageDB>()
+        (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance] as unknown as Array<TableOutletDB>) = new Array<TableOutletDB>()
       }
 
       // second, parse all instance of the selected
       if (sourceInstance[this.dialogData.SourceField as keyof typeof sourceInstance]) {
         this.selection.selected.forEach(
-          triage => {
-            if (!this.initialSelection.includes(triage)) {
-              // console.log("triage " + triage.Name + " has been added to the selection")
+          tableoutlet => {
+            if (!this.initialSelection.includes(tableoutlet)) {
+              // console.log("tableoutlet " + tableoutlet.Name + " has been added to the selection")
 
               let associationInstance = {
-                Name: sourceInstance["Name"] + "-" + triage.Name,
+                Name: sourceInstance["Name"] + "-" + tableoutlet.Name,
               }
 
               let index = associationInstance[this.dialogData.IntermediateStructField + "ID" as keyof typeof associationInstance] as unknown as NullInt64
-              index.Int64 = triage.ID
+              index.Int64 = tableoutlet.ID
               index.Valid = true
 
               let indexDB = associationInstance[this.dialogData.IntermediateStructField + "DBID" as keyof typeof associationInstance] as unknown as NullInt64
-              indexDB.Int64 = triage.ID
+              indexDB.Int64 = tableoutlet.ID
               index.Valid = true
 
               this.frontRepoService.postService(this.dialogData.IntermediateStruct, associationInstance)
 
             } else {
-              // console.log("triage " + triage.Name + " is still selected")
+              // console.log("tableoutlet " + tableoutlet.Name + " is still selected")
             }
           }
         )
       }
 
-      // this.selection = new SelectionModel<TriageDB>(allowMultiSelect, this.initialSelection);
+      // this.selection = new SelectionModel<TableOutletDB>(allowMultiSelect, this.initialSelection);
     }
 
     // why pizza ?

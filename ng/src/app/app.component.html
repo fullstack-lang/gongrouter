@@ -7,12 +7,12 @@
     </mat-radio-group>
 </ng-template>
 
-<as-split unit="pixel" *ngIf="view==triage" direction="vertical">
+<as-split unit="pixel" *ngIf="view==tableoutlet" direction="vertical">
     <as-split-area [size]=40>
         <ng-container *ngTemplateOutlet="radioToolbar"></ng-container>
     </as-split-area>
     <as-split-area [size]="$any('*')">
-        <lib-triage [DataStack]="DataStack" [StructNames]="myArray"></lib-triage>
+        <lib-table-outlet [DataStack]="DataStack" [StructNames]="myArray"></lib-table-outlet>
     </as-split-area>
 </as-split>
 

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Route, Router, Routes } from '@angular/router';
 
 // insertion point for imports
-import { TriagesTableComponent } from './triages-table/triages-table.component'
-import { TriageDetailComponent } from './triage-detail/triage-detail.component'
+import { TableOutletsTableComponent } from './tableoutlets-table/tableoutlets-table.component'
+import { TableOutletDetailComponent } from './tableoutlet-detail/tableoutlet-detail.component'
 
 
 @Injectable({
@@ -36,36 +36,36 @@ export class RouteService {
         return this.getPathRoot() + '_editor' + '_' + stackPath
     }
     // insertion point for per gongstruct route/path getters
-    getTriageTablePath(): string {
-        return this.getPathRoot() + '-triages/:GONG__StackPath'
+    getTableOutletTablePath(): string {
+        return this.getPathRoot() + '-tableoutlets/:GONG__StackPath'
     }
-    getTriageTableRoute(stackPath: string): Route {
+    getTableOutletTableRoute(stackPath: string): Route {
         let route: Route =
-            { path: this.getTriageTablePath(), component: TriagesTableComponent, outlet: this.getTableOutlet(stackPath) }
+            { path: this.getTableOutletTablePath(), component: TableOutletsTableComponent, outlet: this.getTableOutlet(stackPath) }
         return route
     }
-    getTriageAdderPath(): string {
-        return this.getPathRoot() + '-triage-adder/:GONG__StackPath'
+    getTableOutletAdderPath(): string {
+        return this.getPathRoot() + '-tableoutlet-adder/:GONG__StackPath'
     }
-    getTriageAdderRoute(stackPath: string): Route {
+    getTableOutletAdderRoute(stackPath: string): Route {
         let route: Route =
-            { path: this.getTriageAdderPath(), component: TriageDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+            { path: this.getTableOutletAdderPath(), component: TableOutletDetailComponent, outlet: this.getEditorOutlet(stackPath) }
         return route
     }
-    getTriageAdderForUsePath(): string {
-        return this.getPathRoot() + '-triage-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath'
+    getTableOutletAdderForUsePath(): string {
+        return this.getPathRoot() + '-tableoutlet-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath'
     }
-    getTriageAdderForUseRoute(stackPath: string): Route {
+    getTableOutletAdderForUseRoute(stackPath: string): Route {
         let route: Route =
-            { path: this.getTriageAdderForUsePath(), component: TriageDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+            { path: this.getTableOutletAdderForUsePath(), component: TableOutletDetailComponent, outlet: this.getEditorOutlet(stackPath) }
         return route
     }
-    getTriageDetailPath(): string {
-        return this.getPathRoot() + '-triage-detail/:id/:GONG__StackPath'
+    getTableOutletDetailPath(): string {
+        return this.getPathRoot() + '-tableoutlet-detail/:id/:GONG__StackPath'
     }
-    getTriageDetailRoute(stackPath: string): Route {
+    getTableOutletDetailRoute(stackPath: string): Route {
         let route: Route =
-            { path: this.getTriageDetailPath(), component: TriageDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+            { path: this.getTableOutletDetailPath(), component: TableOutletDetailComponent, outlet: this.getEditorOutlet(stackPath) }
         return route
     }
 
@@ -75,10 +75,10 @@ export class RouteService {
 
         this.addRoutes([
             // insertion point for all routes getter
-            this.getTriageTableRoute(stackPath),
-            this.getTriageAdderRoute(stackPath),
-            this.getTriageAdderForUseRoute(stackPath),
-            this.getTriageDetailRoute(stackPath),
+            this.getTableOutletTableRoute(stackPath),
+            this.getTableOutletAdderRoute(stackPath),
+            this.getTableOutletAdderForUseRoute(stackPath),
+            this.getTableOutletDetailRoute(stackPath),
 
         ])
     }

@@ -16,10 +16,10 @@ export * from './lib/push_from_front_nb.service'
 export * from './lib/route-service'
 
 
-export * from './lib/triage-detail/triage-detail.component'
-export * from './lib/triage-sorting/triage-sorting.component'
-export * from './lib/triages-table/triages-table.component'
-export * from './lib/triage-db'
-export * from './lib/triage.service'
+export * from './lib/tableoutlet-detail/tableoutlet-detail.component'
+export * from './lib/tableoutlet-sorting/tableoutlet-sorting.component'
+export * from './lib/tableoutlets-table/tableoutlets-table.component'
+export * from './lib/tableoutlet-db'
+export * from './lib/tableoutlet.service'
 
 

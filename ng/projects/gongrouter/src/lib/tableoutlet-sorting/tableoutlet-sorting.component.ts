@@ -8,30 +8,30 @@ import { DialogData } from '../front-repo.service'
 import { SelectionModel } from '@angular/cdk/collections';
 
 import { Router, RouterState } from '@angular/router';
-import { TriageDB } from '../triage-db'
-import { TriageService } from '../triage.service'
+import { TableOutletDB } from '../tableoutlet-db'
+import { TableOutletService } from '../tableoutlet.service'
 
 import { FrontRepoService, FrontRepo } from '../front-repo.service'
 import { NullInt64 } from '../null-int64'
 
 @Component({
-  selector: 'lib-triage-sorting',
-  templateUrl: './triage-sorting.component.html',
-  styleUrls: ['./triage-sorting.component.css']
+  selector: 'lib-tableoutlet-sorting',
+  templateUrl: './tableoutlet-sorting.component.html',
+  styleUrls: ['./tableoutlet-sorting.component.css']
 })
-export class TriageSortingComponent implements OnInit {
+export class TableOutletSortingComponent implements OnInit {
 
   frontRepo: FrontRepo = new (FrontRepo)
 
-  // array of Triage instances that are in the association
-  associatedTriages = new Array<TriageDB>();
+  // array of TableOutlet instances that are in the association
+  associatedTableOutlets = new Array<TableOutletDB>();
 
   constructor(
-    private triageService: TriageService,
+    private tableoutletService: TableOutletService,
     private frontRepoService: FrontRepoService,
 
-    // not null if the component is called as a selection component of triage instances
-    public dialogRef: MatDialogRef<TriageSortingComponent>,
+    // not null if the component is called as a selection component of tableoutlet instances
+    public dialogRef: MatDialogRef<TableOutletSortingComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: DialogData,
 
     private router: Router,
@@ -42,31 +42,31 @@ export class TriageSortingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getTriages()
+    this.getTableOutlets()
   }
 
-  getTriages(): void {
+  getTableOutlets(): void {
     this.frontRepoService.pull(this.dialogData.GONG__StackPath).subscribe(
       frontRepo => {
         this.frontRepo = frontRepo
 
         let index = 0
-        for (let triage of this.frontRepo.Triages_array) {
+        for (let tableoutlet of this.frontRepo.TableOutlets_array) {
           let ID = this.dialogData.ID
-          let revPointerID = triage[this.dialogData.ReversePointer as keyof TriageDB] as unknown as NullInt64
-          let revPointerID_Index = triage[this.dialogData.ReversePointer + "_Index" as keyof TriageDB] as unknown as NullInt64
+          let revPointerID = tableoutlet[this.dialogData.ReversePointer as keyof TableOutletDB] as unknown as NullInt64
+          let revPointerID_Index = tableoutlet[this.dialogData.ReversePointer + "_Index" as keyof TableOutletDB] as unknown as NullInt64
           if (revPointerID.Int64 == ID) {
             if (revPointerID_Index == undefined) {
               revPointerID_Index = new NullInt64
               revPointerID_Index.Valid = true
               revPointerID_Index.Int64 = index++
             }
-            this.associatedTriages.push(triage)
+            this.associatedTableOutlets.push(tableoutlet)
           }
         }
 
-        // sort associated triage according to order
-        this.associatedTriages.sort((t1, t2) => {
+        // sort associated tableoutlet according to order
+        this.associatedTableOutlets.sort((t1, t2) => {
           let t1_revPointerID_Index = t1[this.dialogData.ReversePointer + "_Index" as keyof typeof t1] as unknown as NullInt64
           let t2_revPointerID_Index = t2[this.dialogData.ReversePointer + "_Index" as keyof typeof t2] as unknown as NullInt64
           if (t1_revPointerID_Index && t2_revPointerID_Index) {
@@ -84,13 +84,13 @@ export class TriageSortingComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.associatedTriages, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.associatedTableOutlets, event.previousIndex, event.currentIndex);
 
-    // set the order of Triage instances
+    // set the order of TableOutlet instances
     let index = 0
 
-    for (let triage of this.associatedTriages) {
-      let revPointerID_Index = triage[this.dialogData.ReversePointer + "_Index" as keyof TriageDB] as unknown as NullInt64
+    for (let tableoutlet of this.associatedTableOutlets) {
+      let revPointerID_Index = tableoutlet[this.dialogData.ReversePointer + "_Index" as keyof TableOutletDB] as unknown as NullInt64
       revPointerID_Index.Valid = true
       revPointerID_Index.Int64 = index++
     }
@@ -98,11 +98,11 @@ export class TriageSortingComponent implements OnInit {
 
   save() {
 
-    this.associatedTriages.forEach(
-      triage => {
-        this.triageService.updateTriage(triage, this.dialogData.GONG__StackPath)
-          .subscribe(triage => {
-            this.triageService.TriageServiceChanged.next("update")
+    this.associatedTableOutlets.forEach(
+      tableoutlet => {
+        this.tableoutletService.updateTableOutlet(tableoutlet, this.dialogData.GONG__StackPath)
+          .subscribe(tableoutlet => {
+            this.tableoutletService.TableOutletServiceChanged.next("update")
           });
       }
     )

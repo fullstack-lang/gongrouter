@@ -38,13 +38,13 @@ func stageInjection(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
-	// Declarations of staged instances of Triage
-	__Triage__000000_Triage := (&models.Triage{Name: `Triage`}).Stage(stage)
+	// Declarations of staged instances of TableOutlet
+	__TableOutlet__000000_TableOutlet := (&models.TableOutlet{Name: `TableOutlet`}).Stage(stage)
 
 	// Setup of values
 
-	// Triage values setup
-	__Triage__000000_Triage.Name = `Triage`
+	// TableOutlet values setup
+	__TableOutlet__000000_TableOutlet.Name = `TableOutlet`
 
 	// Setup of pointers
 }

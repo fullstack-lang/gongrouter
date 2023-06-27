@@ -11,8 +11,8 @@ import { CommitNbFromBackService } from '../commitnbfromback.service'
 import { GongstructSelectionService } from '../gongstruct-selection.service'
 
 // insertion point for per struct import code
-import { TriageService } from '../triage.service'
-import { getTriageUniqueID } from '../front-repo.service'
+import { TableOutletService } from '../tableoutlet.service'
+import { getTableOutletUniqueID } from '../front-repo.service'
 
 import { RouteService } from '../route-service';
 
@@ -158,7 +158,7 @@ export class SidebarComponent implements OnInit {
     private gongstructSelectionService: GongstructSelectionService,
 
     // insertion point for per struct service declaration
-    private triageService: TriageService,
+    private tableoutletService: TableOutletService,
 
     private routeService: RouteService,
   ) { }
@@ -195,7 +195,7 @@ export class SidebarComponent implements OnInit {
 
     // insertion point for per struct observable for refresh trigger
     // observable for changes in structs
-    this.triageService.TriageServiceChanged.subscribe(
+    this.tableoutletService.TableOutletServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
@@ -227,22 +227,22 @@ export class SidebarComponent implements OnInit {
 
       // insertion point for per struct tree construction
       /**
-      * fill up the Triage part of the mat tree
+      * fill up the TableOutlet part of the mat tree
       */
-      let triageGongNodeStruct: GongNode = {
-        name: "Triage",
+      let tableoutletGongNodeStruct: GongNode = {
+        name: "TableOutlet",
         type: GongNodeType.STRUCT,
         id: 0,
         uniqueIdPerStack: 13 * nonInstanceNodeId,
-        structName: "Triage",
+        structName: "TableOutlet",
         associationField: "",
         associatedStructName: "",
         children: new Array<GongNode>()
       }
       nonInstanceNodeId = nonInstanceNodeId + 1
-      this.gongNodeTree.push(triageGongNodeStruct)
+      this.gongNodeTree.push(tableoutletGongNodeStruct)
 
-      this.frontRepo.Triages_array.sort((t1, t2) => {
+      this.frontRepo.TableOutlets_array.sort((t1, t2) => {
         if (t1.Name > t2.Name) {
           return 1;
         }
@@ -252,19 +252,19 @@ export class SidebarComponent implements OnInit {
         return 0;
       });
 
-      this.frontRepo.Triages_array.forEach(
-        triageDB => {
-          let triageGongNodeInstance: GongNode = {
-            name: triageDB.Name,
+      this.frontRepo.TableOutlets_array.forEach(
+        tableoutletDB => {
+          let tableoutletGongNodeInstance: GongNode = {
+            name: tableoutletDB.Name,
             type: GongNodeType.INSTANCE,
-            id: triageDB.ID,
-            uniqueIdPerStack: getTriageUniqueID(triageDB.ID),
-            structName: "Triage",
+            id: tableoutletDB.ID,
+            uniqueIdPerStack: getTableOutletUniqueID(tableoutletDB.ID),
+            structName: "TableOutlet",
             associationField: "",
             associatedStructName: "",
             children: new Array<GongNode>()
           }
-          triageGongNodeStruct.children!.push(triageGongNodeInstance)
+          tableoutletGongNodeStruct.children!.push(tableoutletGongNodeInstance)
 
           // insertion point for per field code
         }
