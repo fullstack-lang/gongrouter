@@ -16,6 +16,9 @@ export class AppComponent implements OnInit {
   DataStack = "gongrouter"
   ModelStacks = "github.com/fullstack-lang/gongrouter/go/models"
 
+  myArray = ['Triage']
+  tableOutletName: string = ""
+
   constructor(
   ) {
 
