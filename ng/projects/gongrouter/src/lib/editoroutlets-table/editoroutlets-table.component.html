@@ -25,6 +25,20 @@
                 {{EditorOutlet.Name}}
             </td>
         </ng-container>
+        <!-- -->
+        <ng-container matColumnDef="EditorType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> EditorType </th>
+            <td mat-cell *matCellDef="let EditorOutlet">
+                {{EditorOutlet.EditorType}}
+            </td>
+        </ng-container>
+        <!-- -->
+        <ng-container matColumnDef="UpdatedObjectID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> UpdatedObjectID </th>
+            <td mat-cell *matCellDef="let EditorOutlet">
+                {{EditorOutlet.UpdatedObjectID}}
+            </td>
+        </ng-container>
 
         <ng-container matColumnDef="ID" sticky>
             <th mat-header-cell *matHeaderCellDef mat-sort-header> ID. </th>

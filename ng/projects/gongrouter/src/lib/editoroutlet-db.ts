@@ -13,6 +13,8 @@ export class EditorOutletDB {
 
 	// insertion point for basic fields declarations
 	Name: string = ""
+	EditorType: string = ""
+	UpdatedObjectID: number = 0
 
 	// insertion point for other declarations
 }

@@ -92,18 +92,35 @@ export class EditorOutletComponent implements OnInit {
           return
         }
 
-        this.setEditorRouterOutlet(editoroutletSingloton.Name.toLowerCase() + "-adder")
+        switch (editoroutletSingloton.EditorType) {
+          case gongrouter.EditorType.EDITOR_ADDER:
+            this.setEditorAdderRouterOutlet(editoroutletSingloton.Name.toLowerCase() + "-adder")
+            break
+          case gongrouter.EditorType.EDITOR_UPDATER:
+            this.setEditorAdderRouterOutlet(editoroutletSingloton.Name.toLowerCase() + "-adder")
+            break
+        }
 
       }
     )
   }
 
-  setEditorRouterOutlet(path: string) {
+  setEditorAdderRouterOutlet(structName: string) {
     let outletName = this.routeService.getEditorOutlet(this.DataStack)
-    let fullPath = this.routeService.getPathRoot() + "-" + path.toLowerCase()
+    let fullPath = this.routeService.getPathRoot() + "-" + structName.toLowerCase()
     let outletConf: any = {}
     outletConf[outletName] = [fullPath, this.DataStack]
     this.router.navigate([{ outlets: outletConf }]);
+  }
+
+  setEditorUpdaterRouterOutlet(structName: string, editoroutletID: number) {
+    let outletName = this.routeService.getEditorOutlet(this.DataStack)
+    let fullPath = this.routeService.getPathRoot() + "-" + structName.toLocaleLowerCase + "-detail"
+
+    let outletConf: any = {}
+    outletConf[outletName] = [fullPath, editoroutletID, this.DataStack]
+
+    this.router.navigate([{ outlets: outletConf }])
   }
 
 }

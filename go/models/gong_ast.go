@@ -618,6 +618,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 					// remove first and last char
 					fielValue := basicLit.Value[1 : len(basicLit.Value)-1]
 					__gong__map_EditorOutlet[identifier].Name = fielValue
+				case "UpdatedObjectID":
+					// convert string to int
+					fielValue, err := strconv.ParseInt(basicLit.Value, 10, 64)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					__gong__map_EditorOutlet[identifier].UpdatedObjectID = int(exprSign) * int(fielValue)
 				}
 			case "TableOutlet":
 				switch fieldName {
@@ -680,6 +687,13 @@ func UnmarshallGongstructStaging(stage *StageStruct, cmap *ast.CommentMap, assig
 				case "EditorOutlet":
 					switch fieldName {
 					// insertion point for enum assign code
+					case "EditorType":
+						var val EditorType
+						err := (&val).FromCodeString(enumValue)
+						if err != nil {
+							log.Fatalln(err)
+						}
+						__gong__map_EditorOutlet[identifier].EditorType = EditorType(val)
 					}
 				case "TableOutlet":
 					switch fieldName {

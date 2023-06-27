@@ -526,7 +526,7 @@ func GetFields[Type Gongstruct]() (res []string) {
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
 	case EditorOutlet:
-		res = []string{"Name"}
+		res = []string{"Name", "EditorType", "UpdatedObjectID"}
 	case TableOutlet:
 		res = []string{"Name"}
 	}
@@ -543,6 +543,11 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 		// string value of fields
 		case "Name":
 			res = any(instance).(EditorOutlet).Name
+		case "EditorType":
+			enum := any(instance).(EditorOutlet).EditorType
+			res = enum.ToCodeString()
+		case "UpdatedObjectID":
+			res = fmt.Sprintf("%d", any(instance).(EditorOutlet).UpdatedObjectID)
 		}
 	case TableOutlet:
 		switch fieldName {

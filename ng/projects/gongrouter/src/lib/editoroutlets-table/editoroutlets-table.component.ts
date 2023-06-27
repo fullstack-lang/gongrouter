@@ -75,6 +75,12 @@ export class EditorOutletsTableComponent implements OnInit {
         case 'Name':
           return editoroutletDB.Name;
 
+        case 'EditorType':
+          return editoroutletDB.EditorType;
+
+        case 'UpdatedObjectID':
+          return editoroutletDB.UpdatedObjectID;
+
         default:
           console.assert(false, "Unknown field")
           return "";
@@ -90,6 +96,8 @@ export class EditorOutletsTableComponent implements OnInit {
 
       // insertion point for merging of fields
       mergedContent += editoroutletDB.Name.toLowerCase()
+      mergedContent += editoroutletDB.EditorType.toLowerCase()
+      mergedContent += editoroutletDB.UpdatedObjectID.toString()
 
       let isSelected = mergedContent.includes(filter.toLowerCase())
       return isSelected
@@ -145,10 +153,14 @@ export class EditorOutletsTableComponent implements OnInit {
     if (this.mode == TableComponentMode.DISPLAY_MODE) {
       this.displayedColumns = ['ID', 'Delete', // insertion point for columns to display
         "Name",
+        "EditorType",
+        "UpdatedObjectID",
       ]
     } else {
       this.displayedColumns = ['select', 'ID', // insertion point for columns to display
         "Name",
+        "EditorType",
+        "UpdatedObjectID",
       ]
       this.selection = new SelectionModel<EditorOutletDB>(allowMultiSelect, this.initialSelection);
     }

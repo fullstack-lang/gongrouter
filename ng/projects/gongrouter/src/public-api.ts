@@ -29,3 +29,4 @@ export * from './lib/tableoutlet-db'
 export * from './lib/tableoutlet.service'
 
 
+export * from './lib/EditorType'

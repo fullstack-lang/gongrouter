@@ -48,6 +48,7 @@ func stageInjection(stage *models.StageStruct) {
 
 	// EditorOutlet values setup
 	__EditorOutlet__000000_EditorOutlet.Name = `EditorOutlet`
+	__EditorOutlet__000000_EditorOutlet.EditorType = models.EDITOR_ADDER
 
 	// TableOutlet values setup
 	__TableOutlet__000000_TableOutlet.Name = `TableOutlet`

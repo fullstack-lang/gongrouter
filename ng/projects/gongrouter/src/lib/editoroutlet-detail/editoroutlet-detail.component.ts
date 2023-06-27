@@ -10,6 +10,7 @@ import { MapOfComponents } from '../map-components'
 import { MapOfSortingComponents } from '../map-components'
 
 // insertion point for imports
+import { EditorTypeSelect, EditorTypeList } from '../EditorType'
 
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -33,6 +34,7 @@ enum EditorOutletDetailComponentState {
 export class EditorOutletDetailComponent implements OnInit {
 
 	// insertion point for declarations
+	EditorTypeList: EditorTypeSelect[] = []
 
 	// the EditorOutletDB of interest
 	editoroutlet: EditorOutletDB = new EditorOutletDB
@@ -110,6 +112,7 @@ export class EditorOutletDetailComponent implements OnInit {
 		)
 
 		// insertion point for initialisation of enums list
+		this.EditorTypeList = EditorTypeList
 	}
 
 	getEditorOutlet(): void {

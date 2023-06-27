@@ -60,6 +60,12 @@ type EditorOutletDB struct {
 
 	// Declation for basic field editoroutletDB.Name
 	Name_Data sql.NullString
+
+	// Declation for basic field editoroutletDB.EditorType
+	EditorType_Data sql.NullString
+
+	// Declation for basic field editoroutletDB.UpdatedObjectID
+	UpdatedObjectID_Data sql.NullInt64
 	// encoding of pointers
 	EditorOutletPointersEnconding
 }
@@ -82,6 +88,10 @@ type EditorOutletWOP struct {
 	// insertion for WOP basic fields
 
 	Name string `xlsx:"1"`
+
+	EditorType models.EditorType `xlsx:"2"`
+
+	UpdatedObjectID int `xlsx:"3"`
 	// insertion for WOP pointer fields
 }
 
@@ -89,6 +99,8 @@ var EditorOutlet_Fields = []string{
 	// insertion for WOP basic fields
 	"ID",
 	"Name",
+	"EditorType",
+	"UpdatedObjectID",
 }
 
 type BackRepoEditorOutletStruct struct {
@@ -351,6 +363,12 @@ func (editoroutletDB *EditorOutletDB) CopyBasicFieldsFromEditorOutlet(editoroutl
 
 	editoroutletDB.Name_Data.String = editoroutlet.Name
 	editoroutletDB.Name_Data.Valid = true
+
+	editoroutletDB.EditorType_Data.String = editoroutlet.EditorType.ToString()
+	editoroutletDB.EditorType_Data.Valid = true
+
+	editoroutletDB.UpdatedObjectID_Data.Int64 = int64(editoroutlet.UpdatedObjectID)
+	editoroutletDB.UpdatedObjectID_Data.Valid = true
 }
 
 // CopyBasicFieldsFromEditorOutletWOP
@@ -359,12 +377,20 @@ func (editoroutletDB *EditorOutletDB) CopyBasicFieldsFromEditorOutletWOP(editoro
 
 	editoroutletDB.Name_Data.String = editoroutlet.Name
 	editoroutletDB.Name_Data.Valid = true
+
+	editoroutletDB.EditorType_Data.String = editoroutlet.EditorType.ToString()
+	editoroutletDB.EditorType_Data.Valid = true
+
+	editoroutletDB.UpdatedObjectID_Data.Int64 = int64(editoroutlet.UpdatedObjectID)
+	editoroutletDB.UpdatedObjectID_Data.Valid = true
 }
 
 // CopyBasicFieldsToEditorOutlet
 func (editoroutletDB *EditorOutletDB) CopyBasicFieldsToEditorOutlet(editoroutlet *models.EditorOutlet) {
 	// insertion point for checkout of basic fields (back repo to stage)
 	editoroutlet.Name = editoroutletDB.Name_Data.String
+	editoroutlet.EditorType.FromString(editoroutletDB.EditorType_Data.String)
+	editoroutlet.UpdatedObjectID = int(editoroutletDB.UpdatedObjectID_Data.Int64)
 }
 
 // CopyBasicFieldsToEditorOutletWOP
@@ -372,6 +398,8 @@ func (editoroutletDB *EditorOutletDB) CopyBasicFieldsToEditorOutletWOP(editorout
 	editoroutlet.ID = int(editoroutletDB.ID)
 	// insertion point for checkout of basic fields (back repo to stage)
 	editoroutlet.Name = editoroutletDB.Name_Data.String
+	editoroutlet.EditorType.FromString(editoroutletDB.EditorType_Data.String)
+	editoroutlet.UpdatedObjectID = int(editoroutletDB.UpdatedObjectID_Data.Int64)
 }
 
 // Backup generates a json file from a slice of all EditorOutletDB instances in the backrepo
