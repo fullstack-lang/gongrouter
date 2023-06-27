@@ -156,6 +156,44 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
+	map_Outlet_Identifiers := make(map[*Outlet]string)
+	_ = map_Outlet_Identifiers
+
+	outletOrdered := []*Outlet{}
+	for outlet := range stage.Outlets {
+		outletOrdered = append(outletOrdered, outlet)
+	}
+	sort.Slice(outletOrdered[:], func(i, j int) bool {
+		return outletOrdered[i].Name < outletOrdered[j].Name
+	})
+	identifiersDecl += "\n\n	// Declarations of staged instances of Outlet"
+	for idx, outlet := range outletOrdered {
+
+		id = generatesIdentifier("Outlet", idx, outlet.Name)
+		map_Outlet_Identifiers[outlet] = id
+
+		decl = IdentifiersDecls
+		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
+		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "Outlet")
+		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", outlet.Name)
+		identifiersDecl += decl
+
+		initializerStatements += "\n\n	// Outlet values setup"
+		// Initialisation of values
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(outlet.Name))
+		initializerStatements += setValueField
+
+		setValueField = StringInitStatement
+		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Path")
+		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(outlet.Path))
+		initializerStatements += setValueField
+
+	}
+
 	map_TableOutlet_Identifiers := make(map[*TableOutlet]string)
 	_ = map_TableOutlet_Identifiers
 
@@ -195,6 +233,16 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 		id = generatesIdentifier("EditorOutlet", idx, editoroutlet.Name)
 		map_EditorOutlet_Identifiers[editoroutlet] = id
+
+		// Initialisation of values
+	}
+
+	for idx, outlet := range outletOrdered {
+		var setPointerField string
+		_ = setPointerField
+
+		id = generatesIdentifier("Outlet", idx, outlet.Name)
+		map_Outlet_Identifiers[outlet] = id
 
 		// Initialisation of values
 	}

@@ -9,6 +9,10 @@ func AfterCreateFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterEditorOutletCreateCallback != nil {
 			stage.OnAfterEditorOutletCreateCallback.OnAfterCreate(stage, target)
 		}
+	case *Outlet:
+		if stage.OnAfterOutletCreateCallback != nil {
+			stage.OnAfterOutletCreateCallback.OnAfterCreate(stage, target)
+		}
 	case *TableOutlet:
 		if stage.OnAfterTableOutletCreateCallback != nil {
 			stage.OnAfterTableOutletCreateCallback.OnAfterCreate(stage, target)
@@ -27,6 +31,11 @@ func AfterUpdateFromFront[Type Gongstruct](stage *StageStruct, old, new *Type) {
 		newTarget := any(new).(*EditorOutlet)
 		if stage.OnAfterEditorOutletUpdateCallback != nil {
 			stage.OnAfterEditorOutletUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
+		}
+	case *Outlet:
+		newTarget := any(new).(*Outlet)
+		if stage.OnAfterOutletUpdateCallback != nil {
+			stage.OnAfterOutletUpdateCallback.OnAfterUpdate(stage, oldTarget, newTarget)
 		}
 	case *TableOutlet:
 		newTarget := any(new).(*TableOutlet)
@@ -48,6 +57,11 @@ func AfterDeleteFromFront[Type Gongstruct](stage *StageStruct, staged, front *Ty
 			staged := any(staged).(*EditorOutlet)
 			stage.OnAfterEditorOutletDeleteCallback.OnAfterDelete(stage, staged, front)
 		}
+	case *Outlet:
+		if stage.OnAfterOutletDeleteCallback != nil {
+			staged := any(staged).(*Outlet)
+			stage.OnAfterOutletDeleteCallback.OnAfterDelete(stage, staged, front)
+		}
 	case *TableOutlet:
 		if stage.OnAfterTableOutletDeleteCallback != nil {
 			staged := any(staged).(*TableOutlet)
@@ -67,6 +81,10 @@ func AfterReadFromFront[Type Gongstruct](stage *StageStruct, instance *Type) {
 		if stage.OnAfterEditorOutletReadCallback != nil {
 			stage.OnAfterEditorOutletReadCallback.OnAfterRead(stage, target)
 		}
+	case *Outlet:
+		if stage.OnAfterOutletReadCallback != nil {
+			stage.OnAfterOutletReadCallback.OnAfterRead(stage, target)
+		}
 	case *TableOutlet:
 		if stage.OnAfterTableOutletReadCallback != nil {
 			stage.OnAfterTableOutletReadCallback.OnAfterRead(stage, target)
@@ -85,6 +103,9 @@ func SetCallbackAfterUpdateFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *EditorOutlet:
 		stage.OnAfterEditorOutletUpdateCallback = any(callback).(OnAfterUpdateInterface[EditorOutlet])
 	
+	case *Outlet:
+		stage.OnAfterOutletUpdateCallback = any(callback).(OnAfterUpdateInterface[Outlet])
+	
 	case *TableOutlet:
 		stage.OnAfterTableOutletUpdateCallback = any(callback).(OnAfterUpdateInterface[TableOutlet])
 	
@@ -97,6 +118,9 @@ func SetCallbackAfterCreateFromFront[Type Gongstruct](stage *StageStruct, callba
 		// insertion point
 	case *EditorOutlet:
 		stage.OnAfterEditorOutletCreateCallback = any(callback).(OnAfterCreateInterface[EditorOutlet])
+	
+	case *Outlet:
+		stage.OnAfterOutletCreateCallback = any(callback).(OnAfterCreateInterface[Outlet])
 	
 	case *TableOutlet:
 		stage.OnAfterTableOutletCreateCallback = any(callback).(OnAfterCreateInterface[TableOutlet])
@@ -111,6 +135,9 @@ func SetCallbackAfterDeleteFromFront[Type Gongstruct](stage *StageStruct, callba
 	case *EditorOutlet:
 		stage.OnAfterEditorOutletDeleteCallback = any(callback).(OnAfterDeleteInterface[EditorOutlet])
 	
+	case *Outlet:
+		stage.OnAfterOutletDeleteCallback = any(callback).(OnAfterDeleteInterface[Outlet])
+	
 	case *TableOutlet:
 		stage.OnAfterTableOutletDeleteCallback = any(callback).(OnAfterDeleteInterface[TableOutlet])
 	
@@ -123,6 +150,9 @@ func SetCallbackAfterReadFromFront[Type Gongstruct](stage *StageStruct, callback
 		// insertion point
 	case *EditorOutlet:
 		stage.OnAfterEditorOutletReadCallback = any(callback).(OnAfterReadInterface[EditorOutlet])
+	
+	case *Outlet:
+		stage.OnAfterOutletReadCallback = any(callback).(OnAfterReadInterface[Outlet])
 	
 	case *TableOutlet:
 		stage.OnAfterTableOutletReadCallback = any(callback).(OnAfterReadInterface[TableOutlet])

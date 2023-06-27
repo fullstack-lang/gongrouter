@@ -23,6 +23,8 @@ type BackRepoStruct struct {
 	// insertion point for per struct back repo declarations
 	BackRepoEditorOutlet BackRepoEditorOutletStruct
 
+	BackRepoOutlet BackRepoOutletStruct
+
 	BackRepoTableOutlet BackRepoTableOutletStruct
 
 	CommitFromBackNb uint // records commit increments when performed by the back
@@ -62,6 +64,7 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 
 	err = db.AutoMigrate( // insertion point for reference to structs
 		&EditorOutletDB{},
+		&OutletDB{},
 		&TableOutletDB{},
 	)
 
@@ -77,6 +80,14 @@ func NewBackRepo(stage *models.StageStruct, filename string) (backRepo *BackRepo
 		Map_EditorOutletDBID_EditorOutletPtr: make(map[uint]*models.EditorOutlet, 0),
 		Map_EditorOutletDBID_EditorOutletDB:  make(map[uint]*EditorOutletDB, 0),
 		Map_EditorOutletPtr_EditorOutletDBID: make(map[*models.EditorOutlet]uint, 0),
+
+		db:    db,
+		stage: stage,
+	}
+	backRepo.BackRepoOutlet = BackRepoOutletStruct{
+		Map_OutletDBID_OutletPtr: make(map[uint]*models.Outlet, 0),
+		Map_OutletDBID_OutletDB:  make(map[uint]*OutletDB, 0),
+		Map_OutletPtr_OutletDBID: make(map[*models.Outlet]uint, 0),
 
 		db:    db,
 		stage: stage,
@@ -135,10 +146,12 @@ func (backRepo *BackRepoStruct) IncrementPushFromFrontNb() uint {
 func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 	// insertion point for per struct back repo phase one commit
 	backRepo.BackRepoEditorOutlet.CommitPhaseOne(stage)
+	backRepo.BackRepoOutlet.CommitPhaseOne(stage)
 	backRepo.BackRepoTableOutlet.CommitPhaseOne(stage)
 
 	// insertion point for per struct back repo phase two commit
 	backRepo.BackRepoEditorOutlet.CommitPhaseTwo(backRepo)
+	backRepo.BackRepoOutlet.CommitPhaseTwo(backRepo)
 	backRepo.BackRepoTableOutlet.CommitPhaseTwo(backRepo)
 
 	backRepo.IncrementCommitFromBackNb()
@@ -148,10 +161,12 @@ func (backRepo *BackRepoStruct) Commit(stage *models.StageStruct) {
 func (backRepo *BackRepoStruct) Checkout(stage *models.StageStruct) {
 	// insertion point for per struct back repo phase one commit
 	backRepo.BackRepoEditorOutlet.CheckoutPhaseOne()
+	backRepo.BackRepoOutlet.CheckoutPhaseOne()
 	backRepo.BackRepoTableOutlet.CheckoutPhaseOne()
 
 	// insertion point for per struct back repo phase two commit
 	backRepo.BackRepoEditorOutlet.CheckoutPhaseTwo(backRepo)
+	backRepo.BackRepoOutlet.CheckoutPhaseTwo(backRepo)
 	backRepo.BackRepoTableOutlet.CheckoutPhaseTwo(backRepo)
 }
 
@@ -180,6 +195,7 @@ func (backRepo *BackRepoStruct) Backup(stage *models.StageStruct, dirPath string
 
 	// insertion point for per struct backup
 	backRepo.BackRepoEditorOutlet.Backup(dirPath)
+	backRepo.BackRepoOutlet.Backup(dirPath)
 	backRepo.BackRepoTableOutlet.Backup(dirPath)
 }
 
@@ -192,6 +208,7 @@ func (backRepo *BackRepoStruct) BackupXL(stage *models.StageStruct, dirPath stri
 
 	// insertion point for per struct backup
 	backRepo.BackRepoEditorOutlet.BackupXL(file)
+	backRepo.BackRepoOutlet.BackupXL(file)
 	backRepo.BackRepoTableOutlet.BackupXL(file)
 
 	var b bytes.Buffer
@@ -218,6 +235,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 
 	// insertion point for per struct backup
 	backRepo.BackRepoEditorOutlet.RestorePhaseOne(dirPath)
+	backRepo.BackRepoOutlet.RestorePhaseOne(dirPath)
 	backRepo.BackRepoTableOutlet.RestorePhaseOne(dirPath)
 
 	//
@@ -226,6 +244,7 @@ func (backRepo *BackRepoStruct) Restore(stage *models.StageStruct, dirPath strin
 
 	// insertion point for per struct backup
 	backRepo.BackRepoEditorOutlet.RestorePhaseTwo()
+	backRepo.BackRepoOutlet.RestorePhaseTwo()
 	backRepo.BackRepoTableOutlet.RestorePhaseTwo()
 
 	backRepo.stage.Checkout()
@@ -255,6 +274,7 @@ func (backRepo *BackRepoStruct) RestoreXL(stage *models.StageStruct, dirPath str
 
 	// insertion point for per struct backup
 	backRepo.BackRepoEditorOutlet.RestoreXLPhaseOne(file)
+	backRepo.BackRepoOutlet.RestoreXLPhaseOne(file)
 	backRepo.BackRepoTableOutlet.RestoreXLPhaseOne(file)
 
 	// commit the restored stage

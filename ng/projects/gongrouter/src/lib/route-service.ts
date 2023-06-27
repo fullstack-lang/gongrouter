@@ -5,6 +5,9 @@ import { Route, Router, Routes } from '@angular/router';
 import { EditorOutletsTableComponent } from './editoroutlets-table/editoroutlets-table.component'
 import { EditorOutletDetailComponent } from './editoroutlet-detail/editoroutlet-detail.component'
 
+import { OutletsTableComponent } from './outlets-table/outlets-table.component'
+import { OutletDetailComponent } from './outlet-detail/outlet-detail.component'
+
 import { TableOutletsTableComponent } from './tableoutlets-table/tableoutlets-table.component'
 import { TableOutletDetailComponent } from './tableoutlet-detail/tableoutlet-detail.component'
 
@@ -72,6 +75,39 @@ export class RouteService {
         return route
     }
 
+    getOutletTablePath(): string {
+        return this.getPathRoot() + '-outlets/:GONG__StackPath'
+    }
+    getOutletTableRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getOutletTablePath(), component: OutletsTableComponent, outlet: this.getTableOutlet(stackPath) }
+        return route
+    }
+    getOutletAdderPath(): string {
+        return this.getPathRoot() + '-outlet-adder/:GONG__StackPath'
+    }
+    getOutletAdderRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getOutletAdderPath(), component: OutletDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getOutletAdderForUsePath(): string {
+        return this.getPathRoot() + '-outlet-adder/:id/:originStruct/:originStructFieldName/:GONG__StackPath'
+    }
+    getOutletAdderForUseRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getOutletAdderForUsePath(), component: OutletDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+    getOutletDetailPath(): string {
+        return this.getPathRoot() + '-outlet-detail/:id/:GONG__StackPath'
+    }
+    getOutletDetailRoute(stackPath: string): Route {
+        let route: Route =
+            { path: this.getOutletDetailPath(), component: OutletDetailComponent, outlet: this.getEditorOutlet(stackPath) }
+        return route
+    }
+
     getTableOutletTablePath(): string {
         return this.getPathRoot() + '-tableoutlets/:GONG__StackPath'
     }
@@ -115,6 +151,11 @@ export class RouteService {
             this.getEditorOutletAdderRoute(stackPath),
             this.getEditorOutletAdderForUseRoute(stackPath),
             this.getEditorOutletDetailRoute(stackPath),
+
+            this.getOutletTableRoute(stackPath),
+            this.getOutletAdderRoute(stackPath),
+            this.getOutletAdderForUseRoute(stackPath),
+            this.getOutletDetailRoute(stackPath),
 
             this.getTableOutletTableRoute(stackPath),
             this.getTableOutletAdderRoute(stackPath),

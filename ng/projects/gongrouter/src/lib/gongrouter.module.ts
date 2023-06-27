@@ -43,6 +43,10 @@ import { EditorOutletsTableComponent } from './editoroutlets-table/editoroutlets
 import { EditorOutletSortingComponent } from './editoroutlet-sorting/editoroutlet-sorting.component'
 import { EditorOutletDetailComponent } from './editoroutlet-detail/editoroutlet-detail.component'
 
+import { OutletsTableComponent } from './outlets-table/outlets-table.component'
+import { OutletSortingComponent } from './outlet-sorting/outlet-sorting.component'
+import { OutletDetailComponent } from './outlet-detail/outlet-detail.component'
+
 import { TableOutletsTableComponent } from './tableoutlets-table/tableoutlets-table.component'
 import { TableOutletSortingComponent } from './tableoutlet-sorting/tableoutlet-sorting.component'
 import { TableOutletDetailComponent } from './tableoutlet-detail/tableoutlet-detail.component'
@@ -54,6 +58,10 @@ import { TableOutletDetailComponent } from './tableoutlet-detail/tableoutlet-det
 		EditorOutletsTableComponent,
 		EditorOutletSortingComponent,
 		EditorOutletDetailComponent,
+
+		OutletsTableComponent,
+		OutletSortingComponent,
+		OutletDetailComponent,
 
 		TableOutletsTableComponent,
 		TableOutletSortingComponent,
@@ -101,6 +109,10 @@ import { TableOutletDetailComponent } from './tableoutlet-detail/tableoutlet-det
 		EditorOutletsTableComponent,
 		EditorOutletSortingComponent,
 		EditorOutletDetailComponent,
+
+		OutletsTableComponent,
+		OutletSortingComponent,
+		OutletDetailComponent,
 
 		TableOutletsTableComponent,
 		TableOutletSortingComponent,

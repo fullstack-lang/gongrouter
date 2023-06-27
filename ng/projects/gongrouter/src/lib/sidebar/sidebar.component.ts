@@ -13,6 +13,8 @@ import { GongstructSelectionService } from '../gongstruct-selection.service'
 // insertion point for per struct import code
 import { EditorOutletService } from '../editoroutlet.service'
 import { getEditorOutletUniqueID } from '../front-repo.service'
+import { OutletService } from '../outlet.service'
+import { getOutletUniqueID } from '../front-repo.service'
 import { TableOutletService } from '../tableoutlet.service'
 import { getTableOutletUniqueID } from '../front-repo.service'
 
@@ -161,6 +163,7 @@ export class SidebarComponent implements OnInit {
 
     // insertion point for per struct service declaration
     private editoroutletService: EditorOutletService,
+    private outletService: OutletService,
     private tableoutletService: TableOutletService,
 
     private routeService: RouteService,
@@ -199,6 +202,14 @@ export class SidebarComponent implements OnInit {
     // insertion point for per struct observable for refresh trigger
     // observable for changes in structs
     this.editoroutletService.EditorOutletServiceChanged.subscribe(
+      message => {
+        if (message == "post" || message == "update" || message == "delete") {
+          this.refresh()
+        }
+      }
+    )
+    // observable for changes in structs
+    this.outletService.OutletServiceChanged.subscribe(
       message => {
         if (message == "post" || message == "update" || message == "delete") {
           this.refresh()
@@ -276,6 +287,50 @@ export class SidebarComponent implements OnInit {
             children: new Array<GongNode>()
           }
           editoroutletGongNodeStruct.children!.push(editoroutletGongNodeInstance)
+
+          // insertion point for per field code
+        }
+      )
+
+      /**
+      * fill up the Outlet part of the mat tree
+      */
+      let outletGongNodeStruct: GongNode = {
+        name: "Outlet",
+        type: GongNodeType.STRUCT,
+        id: 0,
+        uniqueIdPerStack: 13 * nonInstanceNodeId,
+        structName: "Outlet",
+        associationField: "",
+        associatedStructName: "",
+        children: new Array<GongNode>()
+      }
+      nonInstanceNodeId = nonInstanceNodeId + 1
+      this.gongNodeTree.push(outletGongNodeStruct)
+
+      this.frontRepo.Outlets_array.sort((t1, t2) => {
+        if (t1.Name > t2.Name) {
+          return 1;
+        }
+        if (t1.Name < t2.Name) {
+          return -1;
+        }
+        return 0;
+      });
+
+      this.frontRepo.Outlets_array.forEach(
+        outletDB => {
+          let outletGongNodeInstance: GongNode = {
+            name: outletDB.Name,
+            type: GongNodeType.INSTANCE,
+            id: outletDB.ID,
+            uniqueIdPerStack: getOutletUniqueID(outletDB.ID),
+            structName: "Outlet",
+            associationField: "",
+            associatedStructName: "",
+            children: new Array<GongNode>()
+          }
+          outletGongNodeStruct.children!.push(outletGongNodeInstance)
 
           // insertion point for per field code
         }
