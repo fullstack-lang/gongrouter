@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { GongrouterspecificComponent } from './gongrouterspecific.component';
 import { TriageComponent } from './triage/triage.component';
 
+import { Routes, RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -10,6 +11,7 @@ import { TriageComponent } from './triage/triage.component';
     TriageComponent
   ],
   imports: [
+    RouterModule,
   ],
   exports: [
     GongrouterspecificComponent,
