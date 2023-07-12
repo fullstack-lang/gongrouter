@@ -38,8 +38,6 @@ export class GongrouterOutletComponent {
   }
 
   ngOnInit(): void {
-    this.routeService.addDataPanelRoutes(this.DataStack)
-
     this.startAutoRefresh(500); // Refresh every 500 ms (half second)
   }
 
@@ -62,7 +60,7 @@ export class GongrouterOutletComponent {
 
         if (this.lastCommitNbFromBack < commitNbFromBack) {
           const d = new Date()
-          console.log("OutletComponent, ", this.DataStack, " name ", d.toLocaleTimeString() + `.${d.getMilliseconds()}` +
+          console.log("OutletComponent. OutletName: " + this.OutletName + ", Stack: " + this.DataStack, d.toLocaleTimeString() + `.${d.getMilliseconds()}` +
             ", last commit increased nb " + this.lastCommitNbFromBack + " new: " + commitNbFromBack)
           this.lastCommitNbFromBack = commitNbFromBack
           this.refresh()

@@ -38,20 +38,19 @@ func stageInjection(stage *models.StageStruct) {
 
 	// Declaration of instances to stage
 
-	// Declarations of staged instances of EditorOutlet
-	__EditorOutlet__000000_EditorOutlet := (&models.EditorOutlet{Name: `EditorOutlet`}).Stage(stage)
-
-	// Declarations of staged instances of TableOutlet
-	__TableOutlet__000000_TableOutlet := (&models.TableOutlet{Name: `TableOutlet`}).Stage(stage)
+	// Declarations of staged instances of Outlet
+	__Outlet__000000_outlet1 := (&models.Outlet{Name: `outlet1`}).Stage(stage)
+	__Outlet__000001_outlet2 := (&models.Outlet{Name: `outlet2`}).Stage(stage)
 
 	// Setup of values
 
-	// EditorOutlet values setup
-	__EditorOutlet__000000_EditorOutlet.Name = `EditorOutlet`
-	__EditorOutlet__000000_EditorOutlet.EditorType = models.EDITOR_ADDER
+	// Outlet values setup
+	__Outlet__000000_outlet1.Name = `outlet1`
+	__Outlet__000000_outlet1.Path = ``
 
-	// TableOutlet values setup
-	__TableOutlet__000000_TableOutlet.Name = `TableOutlet`
+	// Outlet values setup
+	__Outlet__000001_outlet2.Name = `outlet2`
+	__Outlet__000001_outlet2.Path = ``
 
 	// Setup of pointers
 }

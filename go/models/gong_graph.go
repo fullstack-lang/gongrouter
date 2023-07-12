@@ -5,14 +5,8 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage
-	case *EditorOutlet:
-		ok = stage.IsStagedEditorOutlet(target)
-
 	case *Outlet:
 		ok = stage.IsStagedOutlet(target)
-
-	case *TableOutlet:
-		ok = stage.IsStagedTableOutlet(target)
 
 	default:
 		_ = target
@@ -21,23 +15,9 @@ func IsStaged[Type Gongstruct](stage *StageStruct, instance *Type) (ok bool) {
 }
 
 // insertion point for stage per struct
-	func (stage *StageStruct) IsStagedEditorOutlet(editoroutlet *EditorOutlet) (ok bool) {
-
-		_, ok = stage.EditorOutlets[editoroutlet]
-	
-		return
-	}
-
 	func (stage *StageStruct) IsStagedOutlet(outlet *Outlet) (ok bool) {
 
 		_, ok = stage.Outlets[outlet]
-	
-		return
-	}
-
-	func (stage *StageStruct) IsStagedTableOutlet(tableoutlet *TableOutlet) (ok bool) {
-
-		_, ok = stage.TableOutlets[tableoutlet]
 	
 		return
 	}
@@ -51,14 +31,8 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for stage branch
-	case *EditorOutlet:
-		stage.StageBranchEditorOutlet(target)
-
 	case *Outlet:
 		stage.StageBranchOutlet(target)
-
-	case *TableOutlet:
-		stage.StageBranchTableOutlet(target)
 
 	default:
 		_ = target
@@ -66,21 +40,6 @@ func StageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for stage branch per struct
-func (stage *StageStruct) StageBranchEditorOutlet(editoroutlet *EditorOutlet) {
-
-	// check if instance is already staged
-	if IsStaged(stage, editoroutlet) {
-		return
-	}
-
-	editoroutlet.Stage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
 func (stage *StageStruct) StageBranchOutlet(outlet *Outlet) {
 
 	// check if instance is already staged
@@ -89,21 +48,6 @@ func (stage *StageStruct) StageBranchOutlet(outlet *Outlet) {
 	}
 
 	outlet.Stage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
-func (stage *StageStruct) StageBranchTableOutlet(tableoutlet *TableOutlet) {
-
-	// check if instance is already staged
-	if IsStaged(stage, tableoutlet) {
-		return
-	}
-
-	tableoutlet.Stage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 
@@ -120,14 +64,8 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 
 	switch target := any(instance).(type) {
 	// insertion point for unstage branch
-	case *EditorOutlet:
-		stage.UnstageBranchEditorOutlet(target)
-
 	case *Outlet:
 		stage.UnstageBranchOutlet(target)
-
-	case *TableOutlet:
-		stage.UnstageBranchTableOutlet(target)
 
 	default:
 		_ = target
@@ -135,21 +73,6 @@ func UnstageBranch[Type Gongstruct](stage *StageStruct, instance *Type) {
 }
 
 // insertion point for unstage branch per struct
-func (stage *StageStruct) UnstageBranchEditorOutlet(editoroutlet *EditorOutlet) {
-
-	// check if instance is already staged
-	if ! IsStaged(stage, editoroutlet) {
-		return
-	}
-
-	editoroutlet.Unstage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
 func (stage *StageStruct) UnstageBranchOutlet(outlet *Outlet) {
 
 	// check if instance is already staged
@@ -158,21 +81,6 @@ func (stage *StageStruct) UnstageBranchOutlet(outlet *Outlet) {
 	}
 
 	outlet.Unstage(stage)
-
-	//insertion point for the staging of instances referenced by pointers
-
-	//insertion point for the staging of instances referenced by slice of pointers
-
-}
-
-func (stage *StageStruct) UnstageBranchTableOutlet(tableoutlet *TableOutlet) {
-
-	// check if instance is already staged
-	if ! IsStaged(stage, tableoutlet) {
-		return
-	}
-
-	tableoutlet.Unstage(stage)
 
 	//insertion point for the staging of instances referenced by pointers
 

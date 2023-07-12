@@ -110,52 +110,6 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 	_ = setValueField 
 
 	// insertion initialization of objects to stage
-	map_EditorOutlet_Identifiers := make(map[*EditorOutlet]string)
-	_ = map_EditorOutlet_Identifiers
-
-	editoroutletOrdered := []*EditorOutlet{}
-	for editoroutlet := range stage.EditorOutlets {
-		editoroutletOrdered = append(editoroutletOrdered, editoroutlet)
-	}
-	sort.Slice(editoroutletOrdered[:], func(i, j int) bool {
-		return editoroutletOrdered[i].Name < editoroutletOrdered[j].Name
-	})
-	identifiersDecl += "\n\n	// Declarations of staged instances of EditorOutlet"
-	for idx, editoroutlet := range editoroutletOrdered {
-
-		id = generatesIdentifier("EditorOutlet", idx, editoroutlet.Name)
-		map_EditorOutlet_Identifiers[editoroutlet] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "EditorOutlet")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", editoroutlet.Name)
-		identifiersDecl += decl
-
-		initializerStatements += "\n\n	// EditorOutlet values setup"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(editoroutlet.Name))
-		initializerStatements += setValueField
-
-		if editoroutlet.EditorType != "" {
-			setValueField = StringEnumInitStatement
-			setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "EditorType")
-			setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", "models."+editoroutlet.EditorType.ToCodeString())
-			initializerStatements += setValueField
-		}
-
-		setValueField = NumberInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "UpdatedObjectID")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", fmt.Sprintf("%d", editoroutlet.UpdatedObjectID))
-		initializerStatements += setValueField
-
-	}
-
 	map_Outlet_Identifiers := make(map[*Outlet]string)
 	_ = map_Outlet_Identifiers
 
@@ -194,65 +148,13 @@ func (stage *StageStruct) Marshall(file *os.File, modelsPackageName, packageName
 
 	}
 
-	map_TableOutlet_Identifiers := make(map[*TableOutlet]string)
-	_ = map_TableOutlet_Identifiers
-
-	tableoutletOrdered := []*TableOutlet{}
-	for tableoutlet := range stage.TableOutlets {
-		tableoutletOrdered = append(tableoutletOrdered, tableoutlet)
-	}
-	sort.Slice(tableoutletOrdered[:], func(i, j int) bool {
-		return tableoutletOrdered[i].Name < tableoutletOrdered[j].Name
-	})
-	identifiersDecl += "\n\n	// Declarations of staged instances of TableOutlet"
-	for idx, tableoutlet := range tableoutletOrdered {
-
-		id = generatesIdentifier("TableOutlet", idx, tableoutlet.Name)
-		map_TableOutlet_Identifiers[tableoutlet] = id
-
-		decl = IdentifiersDecls
-		decl = strings.ReplaceAll(decl, "{{Identifier}}", id)
-		decl = strings.ReplaceAll(decl, "{{GeneratedStructName}}", "TableOutlet")
-		decl = strings.ReplaceAll(decl, "{{GeneratedFieldNameValue}}", tableoutlet.Name)
-		identifiersDecl += decl
-
-		initializerStatements += "\n\n	// TableOutlet values setup"
-		// Initialisation of values
-		setValueField = StringInitStatement
-		setValueField = strings.ReplaceAll(setValueField, "{{Identifier}}", id)
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldName}}", "Name")
-		setValueField = strings.ReplaceAll(setValueField, "{{GeneratedFieldNameValue}}", string(tableoutlet.Name))
-		initializerStatements += setValueField
-
-	}
-
 	// insertion initialization of objects to stage
-	for idx, editoroutlet := range editoroutletOrdered {
-		var setPointerField string
-		_ = setPointerField
-
-		id = generatesIdentifier("EditorOutlet", idx, editoroutlet.Name)
-		map_EditorOutlet_Identifiers[editoroutlet] = id
-
-		// Initialisation of values
-	}
-
 	for idx, outlet := range outletOrdered {
 		var setPointerField string
 		_ = setPointerField
 
 		id = generatesIdentifier("Outlet", idx, outlet.Name)
 		map_Outlet_Identifiers[outlet] = id
-
-		// Initialisation of values
-	}
-
-	for idx, tableoutlet := range tableoutletOrdered {
-		var setPointerField string
-		_ = setPointerField
-
-		id = generatesIdentifier("TableOutlet", idx, tableoutlet.Name)
-		map_TableOutlet_Identifiers[tableoutlet] = id
 
 		// Initialisation of values
 	}

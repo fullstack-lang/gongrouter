@@ -30,14 +30,6 @@ type GongStructInterface interface {
 // StageStruct enables storage of staged instances
 // swagger:ignore
 type StageStruct struct { // insertion point for definition of arrays registering instances
-	EditorOutlets           map[*EditorOutlet]any
-	EditorOutlets_mapString map[string]*EditorOutlet
-
-	OnAfterEditorOutletCreateCallback OnAfterCreateInterface[EditorOutlet]
-	OnAfterEditorOutletUpdateCallback OnAfterUpdateInterface[EditorOutlet]
-	OnAfterEditorOutletDeleteCallback OnAfterDeleteInterface[EditorOutlet]
-	OnAfterEditorOutletReadCallback   OnAfterReadInterface[EditorOutlet]
-
 	Outlets           map[*Outlet]any
 	Outlets_mapString map[string]*Outlet
 
@@ -45,14 +37,6 @@ type StageStruct struct { // insertion point for definition of arrays registerin
 	OnAfterOutletUpdateCallback OnAfterUpdateInterface[Outlet]
 	OnAfterOutletDeleteCallback OnAfterDeleteInterface[Outlet]
 	OnAfterOutletReadCallback   OnAfterReadInterface[Outlet]
-
-	TableOutlets           map[*TableOutlet]any
-	TableOutlets_mapString map[string]*TableOutlet
-
-	OnAfterTableOutletCreateCallback OnAfterCreateInterface[TableOutlet]
-	OnAfterTableOutletUpdateCallback OnAfterUpdateInterface[TableOutlet]
-	OnAfterTableOutletDeleteCallback OnAfterDeleteInterface[TableOutlet]
-	OnAfterTableOutletReadCallback   OnAfterReadInterface[TableOutlet]
 
 	AllModelsStructCreateCallback AllModelsStructCreateInterface
 
@@ -118,12 +102,8 @@ type BackRepoInterface interface {
 	BackupXL(stage *StageStruct, dirPath string)
 	RestoreXL(stage *StageStruct, dirPath string)
 	// insertion point for Commit and Checkout signatures
-	CommitEditorOutlet(editoroutlet *EditorOutlet)
-	CheckoutEditorOutlet(editoroutlet *EditorOutlet)
 	CommitOutlet(outlet *Outlet)
 	CheckoutOutlet(outlet *Outlet)
-	CommitTableOutlet(tableoutlet *TableOutlet)
-	CheckoutTableOutlet(tableoutlet *TableOutlet)
 	GetLastCommitFromBackNb() uint
 	GetLastPushFromFrontNb() uint
 }
@@ -142,14 +122,8 @@ func GetDefaultStage() *StageStruct {
 func NewStage() (stage *StageStruct) {
 
 	stage = &StageStruct{ // insertion point for array initiatialisation
-		EditorOutlets:           make(map[*EditorOutlet]any),
-		EditorOutlets_mapString: make(map[string]*EditorOutlet),
-
 		Outlets:           make(map[*Outlet]any),
 		Outlets_mapString: make(map[string]*Outlet),
-
-		TableOutlets:           make(map[*TableOutlet]any),
-		TableOutlets_mapString: make(map[string]*TableOutlet),
 
 		// end of insertion point
 		Map_GongStructName_InstancesNb: make(map[string]int),
@@ -176,9 +150,7 @@ func (stage *StageStruct) Commit() {
 	}
 
 	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["EditorOutlet"] = len(stage.EditorOutlets)
 	stage.Map_GongStructName_InstancesNb["Outlet"] = len(stage.Outlets)
-	stage.Map_GongStructName_InstancesNb["TableOutlet"] = len(stage.TableOutlets)
 
 }
 
@@ -188,9 +160,7 @@ func (stage *StageStruct) Checkout() {
 	}
 
 	// insertion point for computing the map of number of instances per gongstruct
-	stage.Map_GongStructName_InstancesNb["EditorOutlet"] = len(stage.EditorOutlets)
 	stage.Map_GongStructName_InstancesNb["Outlet"] = len(stage.Outlets)
-	stage.Map_GongStructName_InstancesNb["TableOutlet"] = len(stage.TableOutlets)
 
 }
 
@@ -223,46 +193,6 @@ func (stage *StageStruct) RestoreXL(dirPath string) {
 }
 
 // insertion point for cumulative sub template with model space calls
-// Stage puts editoroutlet to the model stage
-func (editoroutlet *EditorOutlet) Stage(stage *StageStruct) *EditorOutlet {
-	stage.EditorOutlets[editoroutlet] = __member
-	stage.EditorOutlets_mapString[editoroutlet.Name] = editoroutlet
-
-	return editoroutlet
-}
-
-// Unstage removes editoroutlet off the model stage
-func (editoroutlet *EditorOutlet) Unstage(stage *StageStruct) *EditorOutlet {
-	delete(stage.EditorOutlets, editoroutlet)
-	delete(stage.EditorOutlets_mapString, editoroutlet.Name)
-	return editoroutlet
-}
-
-// commit editoroutlet to the back repo (if it is already staged)
-func (editoroutlet *EditorOutlet) Commit(stage *StageStruct) *EditorOutlet {
-	if _, ok := stage.EditorOutlets[editoroutlet]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CommitEditorOutlet(editoroutlet)
-		}
-	}
-	return editoroutlet
-}
-
-// Checkout editoroutlet to the back repo (if it is already staged)
-func (editoroutlet *EditorOutlet) Checkout(stage *StageStruct) *EditorOutlet {
-	if _, ok := stage.EditorOutlets[editoroutlet]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CheckoutEditorOutlet(editoroutlet)
-		}
-	}
-	return editoroutlet
-}
-
-// for satisfaction of GongStruct interface
-func (editoroutlet *EditorOutlet) GetName() (res string) {
-	return editoroutlet.Name
-}
-
 // Stage puts outlet to the model stage
 func (outlet *Outlet) Stage(stage *StageStruct) *Outlet {
 	stage.Outlets[outlet] = __member
@@ -303,94 +233,30 @@ func (outlet *Outlet) GetName() (res string) {
 	return outlet.Name
 }
 
-// Stage puts tableoutlet to the model stage
-func (tableoutlet *TableOutlet) Stage(stage *StageStruct) *TableOutlet {
-	stage.TableOutlets[tableoutlet] = __member
-	stage.TableOutlets_mapString[tableoutlet.Name] = tableoutlet
-
-	return tableoutlet
-}
-
-// Unstage removes tableoutlet off the model stage
-func (tableoutlet *TableOutlet) Unstage(stage *StageStruct) *TableOutlet {
-	delete(stage.TableOutlets, tableoutlet)
-	delete(stage.TableOutlets_mapString, tableoutlet.Name)
-	return tableoutlet
-}
-
-// commit tableoutlet to the back repo (if it is already staged)
-func (tableoutlet *TableOutlet) Commit(stage *StageStruct) *TableOutlet {
-	if _, ok := stage.TableOutlets[tableoutlet]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CommitTableOutlet(tableoutlet)
-		}
-	}
-	return tableoutlet
-}
-
-// Checkout tableoutlet to the back repo (if it is already staged)
-func (tableoutlet *TableOutlet) Checkout(stage *StageStruct) *TableOutlet {
-	if _, ok := stage.TableOutlets[tableoutlet]; ok {
-		if stage.BackRepo != nil {
-			stage.BackRepo.CheckoutTableOutlet(tableoutlet)
-		}
-	}
-	return tableoutlet
-}
-
-// for satisfaction of GongStruct interface
-func (tableoutlet *TableOutlet) GetName() (res string) {
-	return tableoutlet.Name
-}
-
 // swagger:ignore
 type AllModelsStructCreateInterface interface { // insertion point for Callbacks on creation
-	CreateORMEditorOutlet(EditorOutlet *EditorOutlet)
 	CreateORMOutlet(Outlet *Outlet)
-	CreateORMTableOutlet(TableOutlet *TableOutlet)
 }
 
 type AllModelsStructDeleteInterface interface { // insertion point for Callbacks on deletion
-	DeleteORMEditorOutlet(EditorOutlet *EditorOutlet)
 	DeleteORMOutlet(Outlet *Outlet)
-	DeleteORMTableOutlet(TableOutlet *TableOutlet)
 }
 
 func (stage *StageStruct) Reset() { // insertion point for array reset
-	stage.EditorOutlets = make(map[*EditorOutlet]any)
-	stage.EditorOutlets_mapString = make(map[string]*EditorOutlet)
-
 	stage.Outlets = make(map[*Outlet]any)
 	stage.Outlets_mapString = make(map[string]*Outlet)
-
-	stage.TableOutlets = make(map[*TableOutlet]any)
-	stage.TableOutlets_mapString = make(map[string]*TableOutlet)
 
 }
 
 func (stage *StageStruct) Nil() { // insertion point for array nil
-	stage.EditorOutlets = nil
-	stage.EditorOutlets_mapString = nil
-
 	stage.Outlets = nil
 	stage.Outlets_mapString = nil
-
-	stage.TableOutlets = nil
-	stage.TableOutlets_mapString = nil
 
 }
 
 func (stage *StageStruct) Unstage() { // insertion point for array nil
-	for editoroutlet := range stage.EditorOutlets {
-		editoroutlet.Unstage(stage)
-	}
-
 	for outlet := range stage.Outlets {
 		outlet.Unstage(stage)
-	}
-
-	for tableoutlet := range stage.TableOutlets {
-		tableoutlet.Unstage(stage)
 	}
 
 }
@@ -401,7 +267,7 @@ func (stage *StageStruct) Unstage() { // insertion point for array nil
 // - full refactoring of Gongstruct identifiers / fields
 type Gongstruct interface {
 	// insertion point for generic types
-	EditorOutlet | Outlet | TableOutlet
+	Outlet
 }
 
 // Gongstruct is the type parameter for generated generic function that allows
@@ -410,25 +276,21 @@ type Gongstruct interface {
 // - full refactoring of Gongstruct identifiers / fields
 type PointerToGongstruct interface {
 	// insertion point for generic types
-	*EditorOutlet | *Outlet | *TableOutlet
+	*Outlet
 	GetName() string
 }
 
 type GongstructSet interface {
 	map[any]any |
 		// insertion point for generic types
-		map[*EditorOutlet]any |
 		map[*Outlet]any |
-		map[*TableOutlet]any |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
 
 type GongstructMapString interface {
 	map[any]any |
 		// insertion point for generic types
-		map[string]*EditorOutlet |
 		map[string]*Outlet |
-		map[string]*TableOutlet |
 		map[*any]any // because go does not support an extra "|" at the end of type specifications
 }
 
@@ -439,12 +301,8 @@ func GongGetSet[Type GongstructSet](stage *StageStruct) *Type {
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[*EditorOutlet]any:
-		return any(&stage.EditorOutlets).(*Type)
 	case map[*Outlet]any:
 		return any(&stage.Outlets).(*Type)
-	case map[*TableOutlet]any:
-		return any(&stage.TableOutlets).(*Type)
 	default:
 		return nil
 	}
@@ -457,12 +315,8 @@ func GongGetMap[Type GongstructMapString](stage *StageStruct) *Type {
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case map[string]*EditorOutlet:
-		return any(&stage.EditorOutlets_mapString).(*Type)
 	case map[string]*Outlet:
 		return any(&stage.Outlets_mapString).(*Type)
-	case map[string]*TableOutlet:
-		return any(&stage.TableOutlets_mapString).(*Type)
 	default:
 		return nil
 	}
@@ -475,12 +329,8 @@ func GetGongstructInstancesSet[Type Gongstruct](stage *StageStruct) *map[*Type]a
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case EditorOutlet:
-		return any(&stage.EditorOutlets).(*map[*Type]any)
 	case Outlet:
 		return any(&stage.Outlets).(*map[*Type]any)
-	case TableOutlet:
-		return any(&stage.TableOutlets).(*map[*Type]any)
 	default:
 		return nil
 	}
@@ -493,12 +343,8 @@ func GetGongstructInstancesMap[Type Gongstruct](stage *StageStruct) *map[string]
 
 	switch any(ret).(type) {
 	// insertion point for generic get functions
-	case EditorOutlet:
-		return any(&stage.EditorOutlets_mapString).(*map[string]*Type)
 	case Outlet:
 		return any(&stage.Outlets_mapString).(*map[string]*Type)
-	case TableOutlet:
-		return any(&stage.TableOutlets_mapString).(*map[string]*Type)
 	default:
 		return nil
 	}
@@ -513,16 +359,8 @@ func GetAssociationName[Type Gongstruct]() *Type {
 
 	switch any(ret).(type) {
 	// insertion point for instance with special fields
-	case EditorOutlet:
-		return any(&EditorOutlet{
-			// Initialisation of associations
-		}).(*Type)
 	case Outlet:
 		return any(&Outlet{
-			// Initialisation of associations
-		}).(*Type)
-	case TableOutlet:
-		return any(&TableOutlet{
 			// Initialisation of associations
 		}).(*Type)
 	default:
@@ -543,18 +381,8 @@ func GetPointerReverseMap[Start, End Gongstruct](fieldname string, stage *StageS
 
 	switch any(ret).(type) {
 	// insertion point of functions that provide maps for reverse associations
-	// reverse maps of direct associations of EditorOutlet
-	case EditorOutlet:
-		switch fieldname {
-		// insertion point for per direct association field
-		}
 	// reverse maps of direct associations of Outlet
 	case Outlet:
-		switch fieldname {
-		// insertion point for per direct association field
-		}
-	// reverse maps of direct associations of TableOutlet
-	case TableOutlet:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -574,18 +402,8 @@ func GetSliceOfPointersReverseMap[Start, End Gongstruct](fieldname string, stage
 
 	switch any(ret).(type) {
 	// insertion point of functions that provide maps for reverse associations
-	// reverse maps of direct associations of EditorOutlet
-	case EditorOutlet:
-		switch fieldname {
-		// insertion point for per direct association field
-		}
 	// reverse maps of direct associations of Outlet
 	case Outlet:
-		switch fieldname {
-		// insertion point for per direct association field
-		}
-	// reverse maps of direct associations of TableOutlet
-	case TableOutlet:
 		switch fieldname {
 		// insertion point for per direct association field
 		}
@@ -601,12 +419,8 @@ func GetGongstructName[Type Gongstruct]() (res string) {
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
-	case EditorOutlet:
-		res = "EditorOutlet"
 	case Outlet:
 		res = "Outlet"
-	case TableOutlet:
-		res = "TableOutlet"
 	}
 	return res
 }
@@ -618,12 +432,8 @@ func GetFields[Type Gongstruct]() (res []string) {
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct name
-	case EditorOutlet:
-		res = []string{"Name", "EditorType", "UpdatedObjectID"}
 	case Outlet:
 		res = []string{"Name", "Path"}
-	case TableOutlet:
-		res = []string{"Name"}
 	}
 	return
 }
@@ -633,17 +443,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 
 	switch any(ret).(type) {
 	// insertion point for generic get gongstruct field value
-	case EditorOutlet:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res = any(instance).(EditorOutlet).Name
-		case "EditorType":
-			enum := any(instance).(EditorOutlet).EditorType
-			res = enum.ToCodeString()
-		case "UpdatedObjectID":
-			res = fmt.Sprintf("%d", any(instance).(EditorOutlet).UpdatedObjectID)
-		}
 	case Outlet:
 		switch fieldName {
 		// string value of fields
@@ -651,12 +450,6 @@ func GetFieldStringValue[Type Gongstruct](instance Type, fieldName string) (res 
 			res = any(instance).(Outlet).Name
 		case "Path":
 			res = any(instance).(Outlet).Path
-		}
-	case TableOutlet:
-		switch fieldName {
-		// string value of fields
-		case "Name":
-			res = any(instance).(TableOutlet).Name
 		}
 	}
 	return
