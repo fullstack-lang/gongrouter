@@ -41,12 +41,14 @@ import { GongstructSelectionService } from 'gongrouter'
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentAComponent } from './component-a/component-a.component';
 import { ComponentBComponent } from './component-b/component-b.component';
+import { ComponentCComponent } from './component-c/component-c.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ComponentAComponent,
-    ComponentBComponent
+    ComponentBComponent,
+    ComponentCComponent
   ],
   imports: [
     BrowserModule,

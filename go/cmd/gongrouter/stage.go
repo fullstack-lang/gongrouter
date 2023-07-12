@@ -39,18 +39,18 @@ func stageInjection(stage *models.StageStruct) {
 	// Declaration of instances to stage
 
 	// Declarations of staged instances of Outlet
-	__Outlet__000000_outlet1 := (&models.Outlet{Name: `outlet1`}).Stage(stage)
-	__Outlet__000001_outlet2 := (&models.Outlet{Name: `outlet2`}).Stage(stage)
+	__Outlet__000000_Outlet1 := (&models.Outlet{Name: `Outlet1`}).Stage(stage)
+	__Outlet__000001_Outlet2 := (&models.Outlet{Name: `Outlet2`}).Stage(stage)
 
 	// Setup of values
 
 	// Outlet values setup
-	__Outlet__000000_outlet1.Name = `outlet1`
-	__Outlet__000000_outlet1.Path = ``
+	__Outlet__000000_Outlet1.Name = `Outlet1`
+	__Outlet__000000_Outlet1.Path = `ComponentC`
 
 	// Outlet values setup
-	__Outlet__000001_outlet2.Name = `outlet2`
-	__Outlet__000001_outlet2.Path = ``
+	__Outlet__000001_Outlet2.Name = `Outlet2`
+	__Outlet__000001_Outlet2.Path = `ComponentB`
 
 	// Setup of pointers
 }

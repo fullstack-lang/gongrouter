@@ -7,21 +7,21 @@
     </mat-radio-group>
 </ng-template>
 
-<as-split unit="pixel" *ngIf="view==outletA" direction="vertical">
+<as-split unit="pixel" *ngIf="view==outlet1" direction="vertical">
     <as-split-area [size]=40>
         <ng-container *ngTemplateOutlet="radioToolbar"></ng-container>
     </as-split-area>
     <as-split-area [size]="$any('*')">
-        <lib-gongrouter-outlet [OutletName]="outletA" [DataStack]="DataStack"></lib-gongrouter-outlet>
+        <lib-gongrouter-outlet [OutletName]="outlet1" [DataStack]="DataStack"></lib-gongrouter-outlet>
     </as-split-area>
 </as-split>
 
-<as-split unit="pixel" *ngIf="view==outletB" direction="vertical">
+<as-split unit="pixel" *ngIf="view==outlet2" direction="vertical">
     <as-split-area [size]=40>
         <ng-container *ngTemplateOutlet="radioToolbar"></ng-container>
     </as-split-area>
     <as-split-area [size]="$any('*')">
-        <lib-gongrouter-outlet [OutletName]="outletB" [DataStack]="DataStack"></lib-gongrouter-outlet>
+        <lib-gongrouter-outlet [OutletName]="outlet2" [DataStack]="DataStack"></lib-gongrouter-outlet>
     </as-split-area>
 </as-split>
 

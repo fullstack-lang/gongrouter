@@ -96,7 +96,7 @@ export class GongrouterOutletComponent {
 
   setOutlet(outletName: string, path: string) {
     let outletConf: any = {}
-    outletConf[outletName] = [path, this.DataStack]
+    outletConf[outletName] = [path]
     this.router.navigate([{ outlets: outletConf }]);
   }
 
