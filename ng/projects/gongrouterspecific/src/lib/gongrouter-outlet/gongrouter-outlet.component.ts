@@ -88,6 +88,9 @@ export class GongrouterOutletComponent {
           return
         }
 
+        if (outlet.Path == "") {
+          return
+        }
         this.setOutlet(outlet.Name, outlet.Path)
 
       }
